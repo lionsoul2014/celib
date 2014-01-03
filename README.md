@@ -1,4 +1,4 @@
-celib是使用ANSI C开发的一个扩展类库(c extend library)，包含一些常用的数据结构和算法的封装：
+celib是使用ANSI C开发的一个扩展类库(c extend library)，包含了一些常用的数据结构和算法的封装，可以用于应用或者学习。
 
 目前已经包含的封装如下:
 
