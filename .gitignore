@@ -1,0 +1,11 @@
+doc/
+help/
+# Binary Files #
+*.out
+*.o
+*.lib
+*.dll
+*.so
+*.a
+# vim swp file #
+*.swp
