@@ -12,12 +12,13 @@
 //version of the celib
 #define CEL_VERSION 1
 
-//share library statement for platform Linux and WinNT
-//Linux
-#define CEL_API extern
-//WinNT
-//#define CEL_API extern __declspec(dllexport)
-#define STA_INLINE static inline
+#ifdef _WIN32
+#	define CEL_API extern __declspec(dllexport)
+#	define STA_INLINE static
+#else
+#	define CEL_API extern
+#	define STA_INLINE static inline
+#endif
 
 
 //memory allocation error
