@@ -13,15 +13,14 @@
 typedef uint32_t ( * cel_hash_fn_t ) ( const char * );
 
 typedef struct {
-    uint_t length;
-    uint_t size;
-    char * str;
+    uint_t 	length;
+    uint_t 	size;
+    char 	*str;
     //about the hash functions
     cel_hash_fn_t * hfuncs;
     uint_t hlength;
     uint_t hsize;
-} cel_bloomfilter_entry;
-typedef cel_bloomfilter_entry * cel_bloomfilter_t;
+} cel_bloomfilter_t;
 
 //quick macro define
 #define cel_bloomfilter_length( bloom ) bloom->length
@@ -34,9 +33,12 @@ typedef cel_bloomfilter_entry * cel_bloomfilter_t;
  *
  * @param	length
  * @param	hfuncs
- * @return	cel_bloomfilter_t
+ * @return	cel_bloomfilter_t *
  */
-CEL_API cel_bloomfilter_t new_cel_bloomfilter( uint_t, uint_t );
+CEL_API cel_bloomfilter_t *new_cel_bloomfilter( uint_t, uint_t );
+
+//free the specified bloom filter.
+CEL_API void free_cel_bloomfilter( cel_bloomfilter_t ** );
 
 /**
  * create a default bloom filter with a specified length.
@@ -59,39 +61,44 @@ CEL_API cel_bloomfilter_t new_cel_bloomfilter( uint_t, uint_t );
  * 32		5.73e-06
  *
  * @param	length
- * @return	cel_bloomfilter_t
+ * @return	cel_bloomfilter_t *
  */
-CEL_API cel_bloomfilter_t default_cel_bloomfilter( uint_t );
+CEL_API int cel_bloomfilter_create( cel_bloomfilter_t *, uint_t, uint_t );
 
-//free the specified bloom filter.
-CEL_API int free_cel_bloomfilter( cel_bloomfilter_t );
+/*
+ * destroy the specified bloomfilter
+ *
+ * @param	cel_bloomfilter_t *
+ * @return	int 1 for success and 0 for failed
+ */
+CEL_API int cel_bloomfilter_destroy( cel_bloomfilter_t * );
 
 /**
  * add a new hash function for the bloom filter.
  *
- * @param	cel_bloomfilter_t
+ * @param	cel_bloomfilter_t *
  * @param	cel_hash_fn_t
  * @return	int
  */
-CEL_API int cel_bloomfilter_add_func( cel_bloomfilter_t, cel_hash_fn_t  );
+CEL_API int cel_bloomfilter_add_func( cel_bloomfilter_t *, cel_hash_fn_t  );
 
 /**
  * add a new string to the specified bloom filter.
  *
- * @param	cel_bloomfilter_t
+ * @param	cel_bloomfilter_t *
  * @param	char *
  * @return	int
  */
-CEL_API int cel_bloomfilter_add( cel_bloomfilter_t, char * );
+CEL_API int cel_bloomfilter_add( cel_bloomfilter_t *, char * );
 
 /**
  * check the specified string is in the specified bloom filter.
  *
- * @param	cel_bloomfilter_t
+ * @param	cel_bloomfilter_t *
  * @param	char *
  * @return	int (1 for true and 0 for false)
  */
-CEL_API int cel_bloomfilter_exists( cel_bloomfilter_t, char * );
+CEL_API int cel_bloomfilter_exists( cel_bloomfilter_t *, char * );
 
 #endif	/*end ifndef*/
 

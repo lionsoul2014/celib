@@ -10,20 +10,22 @@
 #include <string.h>
 
 /* {{{ cel string block*/
-CEL_API cel_string_t new_cel_string( cstring str )
+CEL_API cel_string_t *new_cel_string( cstring str )
 {
 	uint_t len;
-    cel_string_t ptr = ( cel_string_t ) 
-	cel_malloc( sizeof( cel_string_entry ) );
+    cel_string_t *ptr = ( cel_string_t * ) 
+	cel_malloc( sizeof( cel_string_t ) );
     if ( str == NULL ) return NULL;
 
     //Count the length of the string.
     len = (uint_t) strlen( str );
     ptr->str = ( cstring ) cel_malloc( len );
-    if ( ptr->str == NULL ) {
-	cel_free( ptr );
-	return NULL;
+    if ( ptr->str == NULL ) 
+    {
+		cel_free( ptr );
+		return NULL;
     }
+
     //Copy the string to the heap.
     memcpy( ptr->str, str, len );
     ptr->len = len;
@@ -31,20 +33,26 @@ CEL_API cel_string_t new_cel_string( cstring str )
     return ptr;
 }
 
-CEL_API cel_string_t cel_string_long( long numeric )
+CEL_API cel_string_t *cel_string_long( long numeric )
 {
     return NULL;
 }
 
-CEL_API cel_string_t cel_string_double( double decimal )
+CEL_API cel_string_t *cel_string_double( double decimal )
 {
     return NULL;
 }
 
-CEL_API void free_cel_string( cel_string_t str )
+CEL_API void free_cel_string( cel_string_t **cstr )
 {
-    cel_free( str->str );
-    cel_free( str );
+	if ( cstr == NULL ) return;
+	if ( *cstr != NULL )
+	{
+	    cel_free( (*cstr)->str );
+	    cel_free( *cstr );
+	}
+
+	cstr = NULL;
 }
 /* }}}*/
 
@@ -65,15 +73,17 @@ static cstring create_buffer( uint_t opacity )
  * 	specified opacity.
  *
  * @param	opacity - the new opacity
+ * @return	int 1 for success and 0 for failed
  * */
-static void resize_buffer( 
-	cel_strbuff_t sb, uint_t opacity )
+static int resize_buffer( 
+	cel_strbuff_t *sb, uint_t opacity )
 {
 	uint_t length;
     cstring str = create_buffer( opacity );
-    if ( str == NULL ) {
-		free_cel_strbuff( sb );
-		__ALLOCATION_ERROR__
+    if ( str == NULL ) 
+    {
+		//free_cel_strbuff( &sb );
+		return 0;
     }
 
     length = (opacity > sb->size) ? sb->size : opacity;
@@ -83,21 +93,24 @@ static void resize_buffer(
     cel_free( sb->buffer );
     sb->opacity = opacity;
     sb->buffer = str;
+
+    return 1;
 }
 
 /* interface to create new cel_strbuff_entry
  *  or to initialize a specified cel_strbuff_entry.
  * */
-CEL_API cel_strbuff_t new_cel_strbuff_opacity( uint_t opacity )
+CEL_API cel_strbuff_t *new_cel_strbuff_opacity( uint_t opacity )
 {
-    cel_strbuff_t sb = ( cel_strbuff_t ) 
-	cel_malloc( sizeof( cel_strbuff_entry ) );
+    cel_strbuff_t *sb = ( cel_strbuff_t * ) 
+	cel_malloc( sizeof( cel_strbuff_t ) );
     if ( sb == NULL ) return NULL;
 
     sb->buffer = create_buffer( opacity );
-    if ( sb->buffer == NULL ) {
-	cel_free( sb );
-	return NULL;
+    if ( sb->buffer == NULL ) 
+    {
+		cel_free( sb );
+		CEL_ALLOCATE_ERROR("new_cel_strbuff_opacity", opacity);
     }
 
     //initialize.
@@ -107,11 +120,11 @@ CEL_API cel_strbuff_t new_cel_strbuff_opacity( uint_t opacity )
     return sb;
 }
 
-CEL_API cel_strbuff_t new_cel_strbuff_string( cstring str )
+CEL_API cel_strbuff_t *new_cel_strbuff_string( cstring str )
 {
 	uint_t len, bytes;
-    cel_strbuff_t sb = ( cel_strbuff_t ) 
-	cel_malloc( sizeof( cel_strbuff_entry ) );
+    cel_strbuff_t *sb = ( cel_strbuff_t * ) \
+    		cel_malloc( sizeof( cel_strbuff_t ) );
     if ( sb == NULL ) return NULL;
 
     //Count the length.
@@ -119,9 +132,10 @@ CEL_API cel_strbuff_t new_cel_strbuff_string( cstring str )
     bytes = len + _CEL_DEFAULT_STRBUFF_OPACITY_;
 
     sb->buffer = create_buffer( bytes );
-    if ( sb->buffer == NULL ) {
-	cel_free( sb );
-	return NULL;
+    if ( sb->buffer == NULL ) 
+    {
+		cel_free( sb );
+		CEL_ALLOCATE_ERROR("new_cel_strbuff_string", bytes);
     }
 
     //initialize.
@@ -132,29 +146,67 @@ CEL_API cel_strbuff_t new_cel_strbuff_string( cstring str )
     return sb;
 }
 
-CEL_API void cel_strbuff_init( 
-	cel_strbuff_t sb, 
-	uint_t opacity, cstring str )
+//free the specified string buffer.
+CEL_API void free_cel_strbuff( cel_strbuff_t **sb )
 {
-    uint_t len = 0;
+	if ( sb == NULL ) return;
+	if ( *sb != NULL )
+	{
+	    cel_strbuff_destroy(*sb);
+	    cel_free( *sb );
+	}
+	sb = NULL;
+}
+
+/*
+ * create the specified string buffer
+ *
+ * @param	cel_strbuff_t *
+ * @param	uint_t default opacity
+ * @param	cstring default string -  could be NULL
+ * @return	int 1 for success and 0 for failed
+ */
+CEL_API int cel_strbuff_create( 
+	cel_strbuff_t *sb, uint_t opacity, cstring str )
+{
+	uint_t len = 0;
     uint_t bytes = opacity;
 
     //check the initialize string.
     if ( str != NULL )
     {
-	len = strlen( str );
-	bytes += len;
+		len = strlen( str );
+		bytes += len;
     }
 
     sb->buffer = create_buffer( bytes );
-    if ( sb->buffer == NULL ) {
-	__ALLOCATION_ERROR__
+    if ( sb->buffer == NULL ) 
+    {
+		return 0;
     }
 
     //initialize
     sb->opacity = bytes;
     sb->size = len;
     if ( len > 0 ) memcpy( sb->buffer, str, len );
+
+    return 1;
+}
+
+/*
+ * destroy the specified cel_strbuff_t
+ *
+ * @param	cel_strbuff_t *
+ * @return	int 1 for success and 0 for failed
+ */
+CEL_API int cel_strbuff_destroy( cel_strbuff_t *sb )
+{
+	if ( sb != NULL )
+	{
+		cel_free( sb->buffer );
+	}
+
+	return 1;
 }
 
 /*
@@ -163,7 +215,7 @@ CEL_API void cel_strbuff_init(
  * @param cstring - the string to append to.
  * a macro define has replace this.
  * */
-//CEL_API void cel_strbuff_append( cel_strbuff_t sb, cstring str )
+//CEL_API void cel_strbuff_append( cel_strbuff_t *sb, cstring str )
 //{
 //    uint_t len = strlen( str );
 //    if ( sb->size + len > sb->opacity )
@@ -175,46 +227,64 @@ CEL_API void cel_strbuff_init(
 //}
 
 /* append some bytes from a specified buffer
- * 	from a specified index.
+ * 	from a specified index
  *
- * @param cstring - the buffer to copy byte from.
- * @param len - the number of bytes to copy.
- * @param count - repeat times.
+ * @param cstring - the buffer to copy byte from
+ * @param len - the number of bytes to copy
+ * @param count - repeat times
+ * @return	1 for success and 0 for failed
  * */
-CEL_API void cel_strbuff_append_from( 
-	cel_strbuff_t sb, cstring src, uint_t len, int count )
+CEL_API int cel_strbuff_append_from( 
+	cel_strbuff_t *sb, cstring src, uint_t len, int count )
 {
     while ( count-- > 0 ) 
     {
-	//leave a space for the end of the buffer.
-	//change '>' '>=' at 2013-10-12
-	if ( sb->size + len >= sb->opacity )
-	    resize_buffer( sb, (sb->size + len) * 2 + 1 );
+		//leave a space for the end of the buffer.
+		//change '>' '>=' at 2013-10-12
+		if ( sb->size + len >= sb->opacity )
+		{
+		    if ( resize_buffer( sb, (sb->size + len) * 2 + 1 ) == 0 )
+		    {
+		    	return 0;
+		    }
+		}
 
-	//Copy the string insite.
-	if ( len == 1 ) sb->buffer[sb->size++] = src[0];
-	else { 
-	    memcpy( sb->buffer + sb->size, src, len );
-	    sb->size += len;
-	}
+		//Copy the string insite.
+		if ( len == 1 ) sb->buffer[sb->size++] = src[0];
+		else { 
+		    memcpy( sb->buffer + sb->size, src, len );
+		    sb->size += len;
+		}
     }
+
+    return 1;
 }
 
 /* append a char to the buffer.
  *
  * @param char
+ * @return	1 for success and 0 for failed
  * */
-CEL_API void cel_strbuff_append_char( 
-	cel_strbuff_t sb, char ch, int count )
+CEL_API int cel_strbuff_append_char( 
+	cel_strbuff_t *sb, char ch, int count )
 {
     while ( count-- > 0 )
     {
-	//leave a space for the end of the buffer.
-	//change '>' '>=' at 2013-10-12
-	if ( sb->size + 1 >= sb->opacity )
-	    resize_buffer( sb, sb->opacity * 2 + 1 );
-	sb->buffer[sb->size++] = ch;
+		//leave a space for the end of the buffer.
+		//change '>' '>=' at 2013-10-12
+		if ( sb->size + 1 >= sb->opacity ) 
+		{
+		    if ( resize_buffer( sb, sb->opacity * 2 + 1 ) == 0 )
+		    {
+		    	return 0;
+		    }
+		}
+
+		//append the char
+		sb->buffer[sb->size++] = ch;
     }
+
+    return 1;
 }
 
 /* insert a new string to the buffer from the 
@@ -226,7 +296,7 @@ CEL_API void cel_strbuff_append_char(
  * a macro define has replace this.
  * */
 //CEL_API void cel_strbuff_insert( 
-//	cel_strbuff_t sb, uint_t idx, cstring str )
+//	cel_strbuff_t *sb, uint_t idx, cstring str )
 //{
 //    if ( idx > sb->size  ) return;
 //
@@ -245,14 +315,15 @@ CEL_API void cel_strbuff_append_char(
 //    sb->size += len;
 //}
 
-/* insert part of buffer to the buffer.
+/* insert part of buffer to the buffer
  *
- * @param uint_t - start position.
- * @param cstring - source buffer.
- * @param uint_t - number of bytes to copy.
+ * @param uint_t - start position
+ * @param cstring - source buffer
+ * @param uint_t - number of bytes to copy
+ * @return	1 for success and 0 for failed
  * */
-CEL_API void cel_strbuff_insert_from( 
-	cel_strbuff_t sb, uint_t idx, 
+CEL_API int cel_strbuff_insert_from( 
+	cel_strbuff_t *sb, uint_t idx, 
 	cstring src, uint_t len, int count )
 {
     while ( count-- > 0 )
@@ -262,8 +333,13 @@ CEL_API void cel_strbuff_insert_from(
 
 		//leave a space for the end of the buffer.
 		//change '>' '>=' at 2013-10-12
-		if ( sb->size + len >= sb->opacity )
-			resize_buffer( sb, ( sb->size + len ) * 2 + 1);
+		if ( sb->size + len >= sb->opacity ) 
+		{
+			if ( resize_buffer( sb, ( sb->size + len ) * 2 + 1) == 0 )
+			{
+				return 0;
+			}
+		}
 
 		//Copy the old mem back len step.
 		//do not use the memcpy here.
@@ -275,41 +351,52 @@ CEL_API void cel_strbuff_insert_from(
 		sb->size += len;
 		idx += len;
     }
+
+    return 1;
 }
 
 /* insert a char to the buffer from a
  * 	specified index position.
  *
  * @param char
+ * @return	1 for success and 0 for failed
  * */
-CEL_API void cel_strbuff_insert_char( 
-	cel_strbuff_t sb, uint_t idx, char ch, int count )
+CEL_API int cel_strbuff_insert_char( 
+	cel_strbuff_t *sb, uint_t idx, char ch, int count )
 {
     while ( count-- > 0 )
     {
-	if ( idx > sb->size ) return;
+		if ( idx > sb->size ) return 0;
 
-	//leave a space for the end of the buffer.
-	//change '>' '>=' at 2013-10-12
-	if ( sb->size + 1 >= sb->opacity )
-	    resize_buffer( sb, sb->size * 2 + 1 );
+		//leave a space for the end of the buffer.
+		//change '>' '>=' at 2013-10-12
+		if ( sb->size + 1 >= sb->opacity ) 
+		{
+		    if ( resize_buffer( sb, sb->size * 2 + 1 ) == 0 )
+		    {
+		    	return 0;
+		    }
+		}
 
-	sb->buffer[sb->size++] = ch;
-	idx++;
+		sb->buffer[sb->size++] = ch;
+		idx++;
     }
+
+    return 1;
 }
 
 /* remove specified char from a
- * 	specified position from the buffer.
+ * 	specified position from the buffer
  *
- * @param uint_t - the start index.
- * @param uint_t - number of chars to remove.
+ * @param uint_t - the start index
+ * @param uint_t - number of chars to remove
+ * @return	1 for success and 0 for failed
  * */
-CEL_API void cel_strbuff_remove( 
-	cel_strbuff_t sb, uint_t idx, uint_t len )
+CEL_API int cel_strbuff_remove( 
+	cel_strbuff_t *sb, uint_t idx, uint_t len )
 {
 	uint_t i;
-    if ( idx >= sb->size  ) return;
+    if ( idx >= sb->size  ) return 0;
 
     //Recount the length.
     if ( len > sb->size - idx ) 
@@ -323,20 +410,17 @@ CEL_API void cel_strbuff_remove(
     //clear the old buffer part.
     memset( sb->buffer + sb->size - len , 0x00, len );
     sb->size -= len;
+
+    return 1;
 }
 
 //clear the specified string buffer.
-CEL_API void cel_strbuff_clear( cel_strbuff_t sb )
+CEL_API int cel_strbuff_clear( cel_strbuff_t *sb )
 {
     memset( sb->buffer, 0x00, sb->size );
     sb->size = 0;
-}
 
-//free the specified string buffer.
-CEL_API void free_cel_strbuff( cel_strbuff_t sb )
-{
-    cel_free( sb->buffer );
-    cel_free( sb );
+    return 1;
 }
 /* end of string buffer.
  * }}}

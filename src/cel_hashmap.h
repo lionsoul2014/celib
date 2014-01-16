@@ -16,42 +16,40 @@
  *
  * comment it for not store the hashcode.
  */
-#define __STORE_HASH_CODE__
+#define CEL_HASHMAP_STORE_HCODE
 
 //hashmap node struct
 struct hashmap_node_struct {
     char * key;
     //value union
     union {
-	void * ptr;
-	int num;
+	   void * ptr;
+	   int num;
     } value;
     struct hashmap_node_struct * next;
-#ifdef __STORE_HASH_CODE__
+#ifdef CEL_HASHMAP_STORE_HCODE
     uint_t hash;
 #endif
 };
-typedef struct hashmap_node_struct hashmap_node_entry;
-typedef hashmap_node_entry * hashmap_node_t;
+typedef struct hashmap_node_struct hashmap_node_t;
 
 //cel hashmap entry
 typedef struct {
-    hashmap_node_t * table;
+    hashmap_node_t **table;
     uint_t length;
     uint_t size;
     uint_t threshold;
     float factor;
-} cel_hashmap_entry;
-typedef cel_hashmap_entry * cel_hashmap_t;
+} cel_hashmap_t;
 
 //cel hashmap release callback function pointer
-typedef void ( * cel_hashmap_rcb_fn_t ) ( hashmap_node_t );
+typedef void ( * cel_hashmap_rcb_fn_t ) ( hashmap_node_t * );
 
 //quick lanch macro define
-#define cel_hashmap_size( map ) map->size
-#define cel_hashmap_length( map ) map->length
-#define cel_hashmap_factor( map ) map->factor
-#define cel_hashmap_threshold( map ) map->threshold
+#define cel_hashmap_size( map )         map->size
+#define cel_hashmap_length( map )       map->length
+#define cel_hashmap_factor( map )       map->factor
+#define cel_hashmap_threshold( map )    map->threshold
 
 /*
  * create a default cel hashmap with a default
@@ -70,7 +68,7 @@ typedef void ( * cel_hashmap_rcb_fn_t ) ( hashmap_node_t );
  * @param	float
  * @return	cel_hashmap_t
  */
-CEL_API cel_hashmap_t new_cel_hashmap_opacity( uint_t, float );
+CEL_API cel_hashmap_t *new_cel_hashmap_opacity( uint_t, float );
 
 /*
  * free the specified cel hashmap.
@@ -78,7 +76,25 @@ CEL_API cel_hashmap_t new_cel_hashmap_opacity( uint_t, float );
  *	if it is not null.
  */
 CEL_API void free_cel_hashmap( 
-	cel_hashmap_t, cel_hashmap_rcb_fn_t );
+	cel_hashmap_t **, cel_hashmap_rcb_fn_t );
+
+/*
+ * initialize the specified hashmap
+ *
+ * @param   cel_hashmap_t *
+ * @param   uint_t  the default length of the blocks
+ * @param   float   the threshold of the hash map
+ * @return  int 1 for success and 0 for failed
+ */
+CEL_API int cel_hashmap_create( cel_hashmap_t *, uint_t, float );
+
+/*
+ * destroy the specified hashmap
+ *
+ * @param   cel_hashmap_t *
+ * @return  1 for success and 0 for fialed
+*/
+CEL_API int cel_hashmap_destroy( cel_hashmap_t *, cel_hashmap_rcb_fn_t );
 
 /*
  * associated the key with the specified value .
@@ -87,19 +103,19 @@ CEL_API void free_cel_hashmap(
  * @param	void *
  * @return	void * the old the value or NULL
  */
-CEL_API void * cel_hashmap_put( cel_hashmap_t, char *, void * );
+CEL_API void *cel_hashmap_put( cel_hashmap_t *, char *, void * );
 
 //remove the mapping associated with the specified key
-CEL_API void * cel_hashmap_remove( cel_hashmap_t, char *, cel_hashmap_rcb_fn_t );
+CEL_API void *cel_hashmap_remove( cel_hashmap_t *, char *, cel_hashmap_rcb_fn_t );
 
 //get the value associated with the specified key.
-CEL_API void * cel_hashmap_get( cel_hashmap_t, char * );
+CEL_API void *cel_hashmap_get( cel_hashmap_t *, char * );
 
 //check the existence of the mapping associated with the specified key.
-CEL_API int cel_hashmap_exists( cel_hashmap_t, char * );
+CEL_API int cel_hashmap_exists( cel_hashmap_t *, char * );
 
 //replace the value associated with the specified key.
-CEL_API void * cel_hashmap_set( cel_hashmap_t, char *, void * );
+CEL_API void *cel_hashmap_set( cel_hashmap_t *, char *, void * );
 
 
 
@@ -108,10 +124,10 @@ CEL_API void * cel_hashmap_set( cel_hashmap_t, char *, void * );
 typedef cel_hashmap_t cel_ihashmap_t;
 
 //quick lanch macro define
-#define cel_ihashmap_size( map ) map->size
-#define cel_ihashmap_length( map ) map->length
-#define cel_ihashmap_factor( map ) map->factor
-#define cel_ihashmap_threshold( map ) map->threshold
+#define cel_ihashmap_size( map )        map->size
+#define cel_ihashmap_length( map )      map->length
+#define cel_ihashmap_factor( map )      map->factor
+#define cel_ihashmap_threshold( map )   map->threshold
 
 //quick interface to create new ihashmap.
 #define new_cel_ihashmap() new_cel_hashmap()
@@ -131,18 +147,18 @@ typedef cel_hashmap_t cel_ihashmap_t;
  * @param	int
  * @return	int (0 for fail and 1 for true)
  */
-CEL_API int cel_ihashmap_put( cel_ihashmap_t, char *, int );
+CEL_API int cel_ihashmap_put( cel_ihashmap_t *, char *, int );
 
 //remove the mapping associated with the specified key
-CEL_API int cel_ihashmap_remove( cel_ihashmap_t, char *, cel_hashmap_rcb_fn_t );
+CEL_API int cel_ihashmap_remove( cel_ihashmap_t *, char *, cel_hashmap_rcb_fn_t );
 
 //get the value associated with the specified key.
-CEL_API int cel_ihashmap_get( cel_ihashmap_t, char * );
+CEL_API int cel_ihashmap_get( cel_ihashmap_t *, char * );
 
 //check the existence of the mapping associated with the specified key.
-CEL_API int cel_ihashmap_exists( cel_ihashmap_t, char * );
+CEL_API int cel_ihashmap_exists( cel_ihashmap_t *, char * );
 
 //replace the value associated with the specified key.
-CEL_API int cel_ihashmap_set( cel_ihashmap_t, char *, int );
+CEL_API int cel_ihashmap_set( cel_ihashmap_t *, char *, int );
 /*}}}*/
 #endif	/*end ifndef*/

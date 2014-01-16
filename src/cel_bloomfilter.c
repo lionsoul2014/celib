@@ -4,9 +4,9 @@
  *
  * @author	chenxin <chenxin619315@gmail.com>
  */
-#include "cel_bloomfilter.h"
 #include "cel_stdio.h"
 #include "cel_hash.h"
+#include "cel_bloomfilter.h"
 
 #include <limits.h>
 #include <stdlib.h>
@@ -19,39 +19,38 @@
  * @param	hfuncs
  * @return	cel_bloomfilter_t
  */
-CEL_API cel_bloomfilter_t new_cel_bloomfilter( uint_t length, uint_t hfuncs )
+CEL_API cel_bloomfilter_t *new_cel_bloomfilter( 
+        uint_t length, uint_t hfuncs )
 {
-    uint_t __bytes;
-    cel_bloomfilter_t bloom = ( cel_bloomfilter_t ) \
-			      cel_malloc( sizeof( cel_bloomfilter_entry ) );
-    if ( bloom == NULL ) return NULL;
-
-    //make the space for the str
-    __bytes = ( length + CHAR_BIT - 1 ) / CHAR_BIT;
-    if ( (bloom->str = (char *) \
-		cel_calloc(__bytes, sizeof(char))) == NULL) {
-	cel_free(bloom);
-	return NULL;
+   
+    cel_bloomfilter_t *bloom = ( cel_bloomfilter_t * ) \
+			      cel_malloc( sizeof( cel_bloomfilter_t ) );
+    if ( bloom == NULL ) 
+    {
+        CEL_ALLOCATE_ERROR("new_cel_bloomfilter", sizeof(cel_bloomfilter_t));
     }
 
-    //hash functions buckets allocations
-    if ( (bloom->hfuncs = (cel_hash_fn_t *) \
-		cel_calloc(hfuncs, sizeof(cel_hash_fn_t)) ) == NULL ) {
-	cel_free(bloom->str);
-	cel_free(bloom);
-	return NULL;
+    if ( cel_bloomfilter_create(bloom, length, hfuncs) )
+    {
+        cel_free(bloom);
+        CEL_ALLOCATE_ERROR("cel_bloomfilter_create", length);
     }
-
-    //initialize
-    bloom->length = length;
-    bloom->size = 0;
-    bloom->hlength = hfuncs;
-    bloom->hsize = 0;
-    memset(bloom->str, 0x00, __bytes);
 
     return bloom;
 }
 
+//free the specified bloom filter.
+CEL_API void free_cel_bloomfilter( cel_bloomfilter_t **bloom )
+{
+    if ( bloom == NULL ) return;
+    if ( *bloom != NULL )
+    {
+        cel_bloomfilter_destroy(*bloom);
+        cel_free(*bloom);
+    }
+
+    bloom = NULL;
+}
 
 /**
  * create a default bloom filter with a specified length.
@@ -76,10 +75,36 @@ CEL_API cel_bloomfilter_t new_cel_bloomfilter( uint_t length, uint_t hfuncs )
  * @param	length
  * @return	cel_bloomfilter_t
  */
-CEL_API cel_bloomfilter_t default_cel_bloomfilter( uint_t length )
+CEL_API int cel_bloomfilter_create( 
+        cel_bloomfilter_t *bloom, 
+        uint_t length, uint_t hfuncs )
 {
-    cel_bloomfilter_t bloom = new_cel_bloomfilter(length, 8);
-    if ( bloom == NULL ) return NULL; 
+    uint_t __bytes;
+
+    //make the space for the str
+    __bytes = ( length + CHAR_BIT - 1 ) / CHAR_BIT;
+    if ( (bloom->str = (char *) 
+        cel_calloc(__bytes, sizeof(char))) == NULL ) 
+    {
+        return 0;
+    }
+
+    //hash functions buckets allocations
+    if ( (bloom->hfuncs = (cel_hash_fn_t *) \
+        cel_calloc(hfuncs, sizeof(cel_hash_fn_t)) ) == NULL ) 
+    {
+        cel_free(bloom->str);
+        return 0;
+    }
+
+    //initialize
+    bloom->length = length;
+    bloom->size = 0;
+    bloom->hlength = hfuncs;
+    bloom->hsize = 0;
+    memset(bloom->str, 0x00, __bytes);
+
+
 
     //Load the hash functions
     //most of the hash functions is simple and fast, but efficient.
@@ -93,17 +118,23 @@ CEL_API cel_bloomfilter_t default_cel_bloomfilter( uint_t length )
     cel_bloomfilter_add_func(bloom, cel_rs_hash);
     cel_bloomfilter_add_func(bloom, cel_dek_hash);
 
-    return bloom;
+    return 1;
 }
 
-
-//free the specified bloom filter.
-CEL_API int free_cel_bloomfilter( cel_bloomfilter_t bloom )
+/*
+ * destroy the specified bloomfilter
+ *
+ * @param   cel_bloomfilter_t *
+ * @return  int 1 for success and 0 for failed
+ */
+CEL_API int cel_bloomfilter_destroy( cel_bloomfilter_t *bloom )
 {
-    if ( bloom == NULL ) return 0;
-    cel_free(bloom->hfuncs);
-    cel_free(bloom->str);
-    cel_free(bloom);
+    if ( bloom != NULL )
+    {
+        cel_free(bloom->hfuncs);
+        cel_free(bloom->str);
+    }
+
     return 1;
 }
 
@@ -115,12 +146,14 @@ CEL_API int free_cel_bloomfilter( cel_bloomfilter_t bloom )
  * @return	int
  */
 CEL_API int cel_bloomfilter_add_func( 
-	cel_bloomfilter_t bloom,
+	cel_bloomfilter_t *bloom,
 	cel_hash_fn_t func  )
 {
     if ( bloom == NULL ) return 0;
     if ( bloom->hsize < bloom->hlength ) 
-	bloom->hfuncs[bloom->hsize++] = func;
+    {
+	   bloom->hfuncs[bloom->hsize++] = func;
+    }
     return 1;
 }
 
@@ -131,13 +164,18 @@ CEL_API int cel_bloomfilter_add_func(
  * @param	str
  * @return	int
  */
-CEL_API int cel_bloomfilter_add( cel_bloomfilter_t bloom, char * str )
+CEL_API int cel_bloomfilter_add( cel_bloomfilter_t *bloom, char *str )
 {
     register uint_t i;
+
     if ( bloom == NULL ) return 0;
-    for ( i = 0; i < bloom->hsize; i++ )
-	CEL_BIT_OPEN(bloom->str, bloom->hfuncs[i](str) % bloom->length);
+
+    for ( i = 0; i < bloom->hsize; i++ ) 
+    {
+	   CEL_BIT_OPEN(bloom->str, bloom->hfuncs[i](str) % bloom->length);
+    }
     bloom->size++;
+
     return 1;
 }
 
@@ -148,15 +186,19 @@ CEL_API int cel_bloomfilter_add( cel_bloomfilter_t bloom, char * str )
  * @param	str
  * @return	int (1 for true and 0 for false)
  */
-CEL_API int cel_bloomfilter_exists( cel_bloomfilter_t bloom, char * str )
+CEL_API int cel_bloomfilter_exists( cel_bloomfilter_t *bloom, char *str )
 {
     register uint_t i;
-    if ( bloom == NULL ) return 0; 
-    for ( i = 0; i < bloom->hsize; i++ ) {
-	if ( CEL_BIT_FETCH(bloom->str, 
+
+    if ( bloom == NULL ) return 0;
+    
+    for ( i = 0; i < bloom->hsize; i++ ) 
+    {
+	    if ( CEL_BIT_FETCH(bloom->str, 
 		    bloom->hfuncs[i](str) % bloom->length) == 0 )
-	    return 0;
+	       return 0;
     }
+
     return 1;
 }
 

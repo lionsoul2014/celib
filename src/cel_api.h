@@ -1,5 +1,5 @@
 /**
- * common api define of celib .
+ * common api define of celib
  *
  * @author chenxin<chenxin619315@gmail.com>
  */
@@ -10,27 +10,28 @@
 #include <stdlib.h>
 
 //version of the celib
-#define CEL_VERSION 1
+#define CEL_VERSION 1.0
 
-#ifdef _WIN32
-#	define CEL_API extern __declspec(dllexport)
-#	define STA_INLINE static
+#if ( defined(WIN32) || defined(_WIN32) || defined(WINNT) )
+#	define CEL_API 		extern __declspec(dllexport)
+#	define CEL_STATIC 	static
 #else
-#	define CEL_API extern
-#	define STA_INLINE static inline
+#	define CEL_API 		extern
+#	define CEL_STATIC 	static inline
 #endif
 
 
 //memory allocation error
-#define __ALLOCATION_ERROR__	do {						\
-    printf("Unable to do the memory allocation, program will now exit\n");	\
-    exit(1);								\
-} while (0);				
+#define CEL_ALLOCATE_ERROR(func, bytes)	\
+ do { \
+    printf("Allocate error in function <%s> for %d bytes.\n", func, bytes);	\
+    return NULL; \
+} while (0)
 
 /*
- * memory allocation macro define .
+ * memory allocation macro define
  * 	change it to the the serial of function you may to
- * want to use, like the api of your memory pool .
+ * want to use, like the api of your memory pool
  */
 #define cel_calloc( _bytes, _blocks ) calloc( _bytes, _blocks )
 #define cel_malloc( _bytes ) malloc( _bytes )

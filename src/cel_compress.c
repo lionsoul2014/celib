@@ -29,8 +29,8 @@
  * @return	idx or -1 (when match none)
  * */
 static int next_least3_repeat( 
-		char * inbuff, uint_t inlen, 
-		uint_t start, uint_t * len )
+		char *inbuff, uint_t inlen, 
+		uint_t start, uint_t *len )
 {
 	register uint_t i, j;
 	register int p;
@@ -65,7 +65,7 @@ static int next_least3_repeat(
  * @return	1 for encode success and 0 for fail.
  * */
 CEL_API int cel_rle_encode_string( 
-		char * inbuff, uint_t inlen, cel_strbuff_t sb )
+		char *inbuff, uint_t inlen, cel_strbuff_t *sb )
 {
 	register uint_t i, p, last = 0;
 	uint_t len = 0;
@@ -134,7 +134,7 @@ CEL_API int cel_rle_encode_string(
  * @see	cel_rle_enckde_string
  * */
 CEL_API int cel_rle_decode_string( 
-		char * inbuff, uint_t inlen, cel_strbuff_t sb )
+		char *inbuff, uint_t inlen, cel_strbuff_t *sb )
 {
 	register uint_t i, len;
 	register char val;
@@ -175,7 +175,7 @@ CEL_API int cel_rle_encode_file(
 	uint_t len;
 	int length = 0;
 	char inbuff[127];
-	cel_strbuff_t sb = new_cel_strbuff();
+	cel_strbuff_t *sb = new_cel_strbuff();
 
 	//Open the file.
 	if ( (infp = fopen( infile, "rb" )) == NULL 
@@ -199,7 +199,7 @@ CEL_API int cel_rle_encode_file(
 	}
 
 	//free the string buffer.
-	free_cel_strbuff(sb);
+	free_cel_strbuff(&sb);
 
 	return length;
 }
@@ -269,7 +269,7 @@ CEL_API int cel_rle_decode_file(
 
 //lzw encode dictionary hash release callback function.
 //free all the key.
-static void lzw_encode_rcb( hashmap_node_t e ) 
+static void lzw_encode_rcb( hashmap_node_t *e ) 
 {
 	cel_free( e->key );
 }
@@ -281,12 +281,12 @@ static void lzw_encode_rcb( hashmap_node_t e )
  * @param sb - encode result string buffer.
  * */
 CEL_API int cel_lzw_encode_string( 
-		char * inbuff, uint_t len, cel_strbuff_t sb )
+		char * inbuff, uint_t len, cel_strbuff_t *sb )
 {
 	int dsize = 256, i, v = 0, rlen = 0, bits = CHAR_BIT;
-	cel_hashmap_t map = new_cel_hashmap_opacity(16, (float)0.80);
-	cel_strbuff_t S   = new_cel_strbuff_opacity(3);
-	cel_intArray_t ret= new_cel_intArray();
+	cel_hashmap_t *map	= new_cel_hashmap_opacity(16, (float)0.80);
+	cel_strbuff_t *S 	= new_cel_strbuff_opacity(3);
+	cel_intArray_t *ret = new_cel_intArray();
 
 	//initialize the dictionary.
 	char Z[2] = {0};
@@ -323,8 +323,8 @@ CEL_API int cel_lzw_encode_string(
 	//if ( ! cel_strbuff_empty(S) )
 	cel_intArray_add(ret, cel_ihashmap_get(map, S->buffer));
 
-	free_cel_hashmap(map, lzw_encode_rcb);
-	free_cel_strbuff(S);
+	free_cel_hashmap(&map, lzw_encode_rcb);
+	free_cel_strbuff(&S);
 
 
 	//convert the encode codes to binary string.
@@ -359,7 +359,7 @@ CEL_API int cel_lzw_encode_string(
 
 //lzw decode dictionary hash release callback function.
 //free all the key.
-static void lzw_decode_rcb( hashmap_node_t e ) 
+static void lzw_decode_rcb( hashmap_node_t *e ) 
 {
 	cel_free( e->key );
 	cel_free( e->value.ptr );
@@ -372,7 +372,7 @@ static void lzw_decode_rcb( hashmap_node_t e )
  * @param sb - encode result string buffer.
  * */
 CEL_API int cel_lzw_decode_string( 
-		cstring inbuff, uint_t len, cel_strbuff_t sb )
+		cstring inbuff, uint_t len, cel_strbuff_t *sb )
 {
 	int dsize = 256, i;
 	int v = 0, rlen = 0;
@@ -380,9 +380,9 @@ CEL_API int cel_lzw_decode_string(
 	char Z[4] = {0}, key[sizeof(int)] = {0};
 	char * entry;
 
-	cel_intArray_t ret = new_cel_intArray_opacity(len);
-	cel_hashmap_t map;
-	cel_strbuff_t S, T;
+	cel_intArray_t *ret = new_cel_intArray_opacity(len);
+	cel_hashmap_t *map;
+	cel_strbuff_t *S, *T;
 
 	//Convert the binary string to lzw codes.
 	for ( i = 0; i < len; i++ ) 
@@ -453,9 +453,9 @@ CEL_API int cel_lzw_decode_string(
 	}
 
 	//free the allocation.
-	free_cel_strbuff(S);
-	free_cel_strbuff(T);
-	free_cel_hashmap(map, lzw_decode_rcb);
+	free_cel_strbuff(&S);
+	free_cel_strbuff(&T);
+	free_cel_hashmap(&map, lzw_decode_rcb);
 
 	return 1;
 }

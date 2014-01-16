@@ -26,14 +26,14 @@
  * @return 0 for false and 1 for encode success.
  * */
 //CEL_API uint_t cel_rle_encode_string( char *, uint_t, char *, uint_t );
-CEL_API int cel_rle_encode_string( char *, uint_t, cel_strbuff_t );
+CEL_API int cel_rle_encode_string( char *, uint_t, cel_strbuff_t * );
 
 /* decompress the specified string
  * 	compress with RLE compress algorithm.
  *
  * @return 0 for false and 1 for decode success.	
  * */
-CEL_API int cel_rle_decode_string( char *, uint_t, cel_strbuff_t );
+CEL_API int cel_rle_decode_string( char *, uint_t, cel_strbuff_t * );
 
 /* compress the specified file with RLE compress algorhim.
  *
@@ -65,7 +65,7 @@ CEL_API int cel_rle_decode_file( char *, char * );
  * @param len - length of the source string.
  * @param sb - encode result string buffer.
  * */
-CEL_API int cel_lzw_encode_string( char *, uint_t, cel_strbuff_t );
+CEL_API int cel_lzw_encode_string( char *, uint_t, cel_strbuff_t * );
 
 /* decode the specified string with lzw algorithm.
  *
@@ -73,7 +73,7 @@ CEL_API int cel_lzw_encode_string( char *, uint_t, cel_strbuff_t );
  * @param len - length of the source string.
  * @param sb - encode result string buffer.
  * */
-CEL_API int cel_lzw_decode_string( cstring, uint_t, cel_strbuff_t );
+CEL_API int cel_lzw_decode_string( cstring, uint_t, cel_strbuff_t * );
 
 /* encode the specified file with lzw compress algorithm.
  *
