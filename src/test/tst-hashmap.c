@@ -10,19 +10,24 @@
 int main( int argc, char *args[] )
 {
     uint_t i, length;
-    cel_hashmap_t map = new_cel_hashmap();
+    //cel_hashmap_t *map = new_cel_hashmap();
+    cel_hashmap_t hmap, *map;
+    map = &hmap;
+    cel_hashmap_create(&hmap, 16, 0.75);
+
     char *name[] = {
     	"chenmanwen", "yangqinghua", "chenxin", "yanzi", "yangjian", "zhangrenfang",
-	"panzi", "zhangqiang", "webssky", "jcseg", "friso", "robbe", "lionsoul",
-	"tankwar", "jteach"
+    	"panzi", "zhangqiang", "webssky", "jcseg", "friso", "robbe", "lionsoul",
+    	"tankwar", "jteach"
     };
     length = 15;
 
     //test put
     printf("+---test put: \n");
-    for ( i = 0; i < length; i++ ) {
-	printf("put(%15s, %15s);\n", name[i], name[i]);
-	cel_hashmap_put( map, name[i], name[i] );
+    for ( i = 0; i < length; i++ ) 
+    {
+    	printf("put(%15s, %15s);\n", name[i], name[i]);
+    	cel_hashmap_put( map, name[i], name[i] );
     }
     printf("length: %d, size: %d, threshold: %d\n", 
 	    cel_hashmap_length(map),
@@ -33,14 +38,14 @@ int main( int argc, char *args[] )
     //test get
     printf("+---test get: \n");
     for ( i = 0; i < length; i++ )
-	printf("get(%15s): %15s\n", name[i], (char *)cel_hashmap_get(map, name[i]));
+	   printf("get(%15s): %15s\n", name[i], (char *)cel_hashmap_get(map, name[i]));
     printf("get(%15s): %15s\n", "lionsoul", (char *)cel_hashmap_get(map, "lionsoul"));
     putchar('\n');
 
     //test exists
     printf("+---test exists: \n");
     for ( i = 0; i < length; i++ )
-	printf("exists(%15s): %d\n", name[i], cel_hashmap_exists(map, name[i]));
+	   printf("exists(%15s): %d\n", name[i], cel_hashmap_exists(map, name[i]));
     printf("exists(%15s): %d\n", "lionsoul", cel_hashmap_exists(map, "lionsoul"));
     putchar('\n');
 
@@ -54,18 +59,21 @@ int main( int argc, char *args[] )
 
     //test get
     printf("+---test get: \n");
-    for ( i = 0; i < length; i++ ) {
-	printf("get(%15s): %15s\n", name[i], (char *)cel_hashmap_get(map, name[i]));
+    for ( i = 0; i < length; i++ ) 
+    {
+	   printf("get(%15s): %15s\n", name[i], (char *)cel_hashmap_get(map, name[i]));
     }
     putchar('\n');
 
     //test remove
     printf("+---test remove: \n");
-    printf("remove(%15s): %15s\n", "lionsoul", (char *)cel_hashmap_remove(map, "lionsoul"));
-    printf("remove(%15s): %15s\n", "chenxin", (char *)cel_hashmap_remove(map, "chenxin"));
+    printf("remove(%15s): %15s\n", "lionsoul", (char *)cel_hashmap_remove(map, "lionsoul", NULL));
+    printf("remove(%15s): %15s\n", "chenxin", (char *)cel_hashmap_remove(map, "chenxin", NULL));
     printf("size: %d\n", cel_hashmap_size(map));
 
     //free the hashmap
-    free_cel_hashmap(map, NULL);
+    //free_cel_hashmap(&map, NULL);
+    cel_hashmap_destroy(map, NULL);
+
     return 0;
 }

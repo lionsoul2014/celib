@@ -19,18 +19,19 @@ int main( int argc, char *args[] )
     //Utf-8 to unicode.
     for ( i = 0, j = 0; i < length; j++ )
     {
-	//printf("bytes=%d, i=%d\n", bytes, i);
-	ucode[j] = cel_utf8_to_ucode( &str[i] );
-	bytes = cel_utf8_charbytes( str[i] );
-	i += bytes;
-	printf("%d, ", ucode[j]);
+    	//printf("bytes=%d, i=%d\n", bytes, i);
+    	ucode[j] = cel_utf8_to_ucode( &str[i] );
+    	bytes = cel_utf8_charbytes( str[i] );
+    	i += bytes;
+    	printf("%d, ", ucode[j]);
     }
     putchar('\n');
 
     //Unicode to utf-8
-    for ( i = 0; i < 5; i++ ) {
+    for ( i = 0; i < 5; i++ ) 
+    {
     	j = cel_ucode_to_utf8( ucode[i], buff );
-	buff += j;
+	   buff += j;
     }
     printf("buffer=%s\n", buffer);
 

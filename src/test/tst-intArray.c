@@ -5,7 +5,7 @@
  */
 #include "../cel_array.h"
 
-static void print_array( cel_intArray_t arr )
+static void print_array( cel_intArray_t *arr )
 {
     uint_t i;
 	printf("length=%d, size=%d: \n", arr->length, arr->size);
@@ -16,7 +16,7 @@ static void print_array( cel_intArray_t arr )
 
 int main( int argc, char *args[] )
 {
-    cel_intArray_t arr = new_cel_intArray();
+    cel_intArray_t *arr = new_cel_intArray();
 
     printf("+---test add: \n");
     cel_intArray_add( arr, 1 );
@@ -48,6 +48,7 @@ int main( int argc, char *args[] )
     cel_intArray_insert( arr, 1, 2 );
     print_array( arr );
 
-    free_cel_intArray( arr );
+    free_cel_intArray( &arr );
+
     return 0;
 }

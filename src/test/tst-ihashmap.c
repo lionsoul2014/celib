@@ -8,7 +8,10 @@
 
 int main( int argc, char *args[] )
 {
-    cel_ihashmap_t imap = new_cel_ihashmap();
+    //cel_ihashmap_t *imap = new_cel_ihashmap();
+    cel_ihashmap_t ihmap, *imap;
+    imap = &ihmap;
+    cel_ihashmap_create(&ihmap, 16, 0.75);
 
     printf("+---test put: \n");
     cel_ihashmap_put(imap, "01", 1);
@@ -28,10 +31,11 @@ int main( int argc, char *args[] )
     uint_t i;
     char buff[3] = {0};
     printf("+---test get: \n");
-    for ( i = 1; i <= 8; i++ ) {
-	buff[0] = '0';
-	buff[1] = i+'0';
-	printf("get(\"%s\")=%d\n", buff, cel_ihashmap_get(imap, buff));
+    for ( i = 1; i <= 8; i++ ) 
+    {
+    	buff[0] = '0';
+    	buff[1] = i+'0';
+    	printf("get(\"%s\")=%d\n", buff, cel_ihashmap_get(imap, buff));
     }
 
     printf("+---test remove: \n");
@@ -40,12 +44,15 @@ int main( int argc, char *args[] )
     printf("size=%d, length=%d\n", cel_ihashmap_size(imap), cel_ihashmap_length(imap));
 
     printf("+--test exists: \n");
-    for ( i = 1; i < 10; i++ ) {
-	buff[0] = '0';
-	buff[1] = '0'+i;
-	printf("exists(\"%s\")=%d\n", buff, cel_ihashmap_exists(imap, buff));
+    for ( i = 1; i < 10; i++ ) 
+    {
+    	buff[0] = '0';
+    	buff[1] = '0'+i;
+    	printf("exists(\"%s\")=%d\n", buff, cel_ihashmap_exists(imap, buff));
     }
 
-    free_cel_ihashmap( imap, NULL );
+    //free_cel_ihashmap( &imap, NULL );
+    cel_ihashmap_destroy(imap);
+
     return 0;
 }

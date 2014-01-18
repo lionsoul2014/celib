@@ -12,7 +12,7 @@
 int main( int argc, char *args[] )
 {
     //char * str = "ababcdefefgggghihijklmnmnopqrsoptuvwxyzxyzgg.";
-    char * str = "AAAAAAABBBBBBABABABCDCDCDEFGHIJKLMNOPPQOPRSTUVWXYZZL";
+    char *str = "AAAAAAABBBBBBABABABCDCDCDEFGHIJKLMNOPPQOPRSTUVWXYZZL";
     //char * str = "the/rain/in/Spain/falls/mainly/on/the/plain";
     //char * str = "where there is a will and there is a way";
     //char * str = "ababcdefgefg";
@@ -20,8 +20,8 @@ int main( int argc, char *args[] )
     //char * str = "http://translate.google.cn/#zh-CN/en/%E5%BE%88%E5%AE%B9%E6%98%93";
     //char * str = "测试lzw压缩算法的测试程序-研究生命起源起源, 研研究生测试算法lzw的程序.";
     uint_t len = strlen(str);
-    cel_strbuff_t  ensb = new_cel_strbuff();
-    cel_strbuff_t  desb = new_cel_strbuff();
+    cel_strbuff_t  *ensb = new_cel_strbuff();
+    cel_strbuff_t  *desb = new_cel_strbuff();
 
     printf("data=%s, size=%d\n", str, len);
 
@@ -47,8 +47,8 @@ int main( int argc, char *args[] )
     }
     putchar('\n');
 
-    free_cel_strbuff(ensb);
-    free_cel_strbuff(desb);
+    free_cel_strbuff(&ensb);
+    free_cel_strbuff(&desb);
 
     return 0;
 }

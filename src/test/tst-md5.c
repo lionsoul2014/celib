@@ -24,11 +24,12 @@ int main( int argc, char *args[] )
     uint_t length = 8, i;
     uchar_t digest[17] = {0};
 
-    for ( i = 0; i < length; i++ ) {
-	cel_md5_string( str[i], digest );
-	printf("cel_md5_string(\"%-26s\")=", str[i]);
-	md5_print( digest );
-	putchar('\n');
+    for ( i = 0; i < length; i++ ) 
+    {
+    	cel_md5_string( str[i], digest );
+    	printf("cel_md5_string(\"%-26s\")=", str[i]);
+    	md5_print( digest );
+    	putchar('\n');
     }
     putchar('\n');
 
@@ -37,11 +38,11 @@ int main( int argc, char *args[] )
     printf("File: %s\n", filename);
     if ( cel_md5_file( filename, digest ) == 0 )
     {
-	printf("md5(\"%s\")=", filename);
-	md5_print( digest );
-	putchar('\n');
+    	printf("md5(\"%s\")=", filename);
+    	md5_print( digest );
+    	putchar('\n');
     } else
-	printf("file not exists!");
+	   printf("file not exists!");
 
     putchar('\n');
 

@@ -15,13 +15,17 @@ static int string_compare( void * str1, void * str2 ) {
 int main( int argc, char *args[] )
 {
     uint_t i = 0;
-    cel_link_t link = new_cel_link();
+    //cel_link_t *link = new_cel_link();
+    cel_link_t entry, *link;
     char * a[] = {"chenxin", "yanzi", "zhangrenfang", "yangjian", "pangzi", "last"};
+
+    cel_link_create(&entry);
+    link = &entry;
 
     //test add
     printf("+---element add: \n");
     for ( i = 0; i < 6; i++ )
-	cel_link_add_last( link, a[i]);
+	   cel_link_add_last( link, a[i]);
     printf("size: %d\n", cel_link_size(link));
     __PRINT_LINK__
 
@@ -72,6 +76,8 @@ int main( int argc, char *args[] )
     __PRINT_LINK__
 
 
-    free_cel_link( link, NULL );
+    //free_cel_link( &link, NULL );
+    cel_link_destroy(link, NULL);
+
     return 0;
 }
