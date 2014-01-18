@@ -159,11 +159,14 @@ static void merge(
 	{
 		ltmp = a + l * size;
 		rtmp = a + r * size;
-		if ( comp( ltmp, rtmp ) < 0 ) {
+		if ( comp( ltmp, rtmp ) < 0 ) 
+		{
 			//Copy the left current one to the temp.
 			cel_mem_copy(ltmp, tmp + p * size, size);
 			l++;
-		} else {
+		} 
+		else 
+		{
 			//Copy the right current one to the temp.
 			cel_mem_copy(rtmp, tmp + p * size, size);
 			r++;
@@ -172,19 +175,22 @@ static void merge(
 	}
 
 	//Copy the rest of the left to the temp.
-	while ( l <= lend ) {
+	while ( l <= lend ) 
+	{
 		cel_mem_copy( a + l * size, tmp + p * size, size );
 		l++; p++;
 	}
 
 	//Copy the rest of the right to the temp.
-	while ( r <= rend ) {
+	while ( r <= rend ) 
+	{
 		cel_mem_copy( a + r * size, tmp + p * size, size );
 		r++; p++;
 	}
 
 	//Copy the items back from the temp to the origin one.
-	while ( ptmp <= rend ) {
+	while ( ptmp <= rend ) 
+	{
 		cel_mem_copy( tmp + ptmp * size, a + ptmp * size, size );
 		ptmp++;
 	}
@@ -214,7 +220,8 @@ CEL_API void cel_merge_sort(
 	while ( offset <= length ) 
 	{
 		len = length / offset;
-		for ( j = 0, i = 0; j < len - 1; j++ ) {
+		for ( j = 0, i = 0; j < len - 1; j++ ) 
+		{
 			//The right end was included, so plus 1 with it.
 			merge( arr, tmp, size, comp, i, i + offset / 2, i + offset - 1 );
 			i += offset;
@@ -226,7 +233,8 @@ CEL_API void cel_merge_sort(
 
 		//Check if any items left for the array.
 		len = i + offset / 2;
-		if ( len <= length - 1 ) {
+		if ( len <= length - 1 ) 
+		{
 			merge( arr, tmp, size, comp, i, i + offset / 2, length - 1 );
 		}
 
@@ -236,7 +244,8 @@ CEL_API void cel_merge_sort(
 
 	//Check and merge the rest of the left items.
 	offset /= 2;
-	if ( offset < length ) {
+	if ( offset < length ) 
+	{
 		merge( arr, tmp, size, comp, 0, offset, length - 1 );
 	}
 
@@ -286,7 +295,8 @@ static void quicksort(
 		uint_t right ) 
 {
 	//printf("left: %d, right: %d\n", left, right);
-	if ( left + 11 <= right ) {
+	if ( left + 11 <= right ) 
+	{
 		//get the privot of the subarray.
 		uchar_t * pivot = median3( arr, size, comp, left, right );
 		//printf("pivote: %d\n", *pivot);
@@ -308,7 +318,9 @@ static void quicksort(
 		quicksort( arr, size, comp, left, i - 1 );
 		quicksort( arr, size, comp, i, right );
 
-	} else {
+	} 
+	else 
+	{
 		//if the number of the items is less than CUTOFF use insertion sort instead.
 		cel_subinsert_sort( arr, size, comp, left, right );
 	}

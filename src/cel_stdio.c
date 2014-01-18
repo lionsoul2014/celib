@@ -27,9 +27,9 @@ CEL_API void cel_mem_swap( void * a, void * b, int size )
     //} while ( --size > 0);
     while ( size-- > 0 ) 
     {
-	temp = *__a;	
-	*__a++ = *__b;
-	*__b++ = temp;
+    	temp = *__a;	
+    	*__a++ = *__b;
+    	*__b++ = temp;
     }
 }
 
@@ -50,8 +50,8 @@ CEL_API void cel_mem_copy( void * _src, void * _dst, int size )
     //} while ( --size > 0 );
     while ( size-- > 0 )
     {
-	//printf("size=%d\n", size);
-	*__dst++ = *__src++;
+    	//printf("size=%d\n", size);
+    	*__dst++ = *__src++;
     }
 }
 
@@ -70,12 +70,12 @@ CEL_API void cel_mem_bits( const char * name, const void * ptr, uint_t __bytes )
     if ( name != NULL ) printf("%s", name);
     for ( i = 0; i < length; )
     {
-	if ( CEL_BIT_FETCH(str, i) != 0 )
-	    printf("1");
-	else
-	    printf("0");
-	//print a space for every 8 bits
-	if ( (++i % 8) == 0 ) printf(" ");
+    	if ( CEL_BIT_FETCH(str, i) != 0 )
+    	    printf("1");
+    	else
+    	    printf("0");
+    	//print a space for every 8 bits
+    	if ( (++i % 8) == 0 ) printf(" ");
     }
     printf("\n");
 }
@@ -105,11 +105,11 @@ CEL_API void cel_mem_store(
     //cel_mem_bits("_src: ", _src, 8);
     for ( i = 0; i < bits; i++ )
     {
-	//printf("%2d: %d\n", start + i, CEL_BIT_FETCH(__src, start + i) != 0);
-	if ( CEL_BIT_FETCH(__src, start + i) != 0 )
-	    CEL_BIT_OPEN( __dst, idx + i );
-	else
-	    CEL_BIT_SHUT( __dst, idx + i );
+    	//printf("%2d: %d\n", start + i, CEL_BIT_FETCH(__src, start + i) != 0);
+    	if ( CEL_BIT_FETCH(__src, start + i) != 0 )
+    	    CEL_BIT_OPEN( __dst, idx + i );
+    	else
+    	    CEL_BIT_SHUT( __dst, idx + i );
     }	
 
     //uint32_t * __dst = ( uint32_t * ) _dst;
@@ -156,12 +156,14 @@ CEL_API llong_t cel_filesize( char * file )
     llong_t length = 0;
 
     if ( (fp = fopen( file, "rb" )) == NULL )
-	return -1;
-    else {
-	fseek( fp, 0L, SEEK_END );
-	length = ftell( fp );
-	fclose( fp );
+	   return -1;
+    else 
+    {
+    	fseek( fp, 0L, SEEK_END );
+    	length = ftell( fp );
+    	fclose( fp );
     }
+    
     //printf("cel_filesize#done");
     return length;
 }

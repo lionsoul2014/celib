@@ -17,6 +17,7 @@ CEL_API int cel_next_prime( int n )
 {
     if ( n % 2 == 0 ) n++;
     for ( ; ! cel_is_prime( n ); n = n + 2 ) ;
+        
     return n;
 }
 
@@ -29,15 +30,18 @@ CEL_API int cel_next_prime( int n )
 CEL_API int cel_is_prime( int n )
 {
     int j;
+
     //simple check
     if ( n == 2 || n == 3 )
-	return 1;
+	   return 1;
+
     if ( n == 1 || n % 2 == 0 )
-	return 0;
+	   return 0;
 
     //loop check
     for ( j = 3; j * j < n; j++ )
-	if ( n % j == 0 ) return 0;
+	   if ( n % j == 0 ) return 0;
+
     return 1;
 }
 

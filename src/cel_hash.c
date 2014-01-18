@@ -40,9 +40,12 @@ CEL_API uint32_t cel_bkdr_hash( const char * str )
 {
     register uint32_t h = 0;
     uint32_t seed = 131;	//31 131 1313 13131
-    while ( *str != '\0' ) {
-	h = h * seed + ( *str++ ); 
+
+    while ( *str != '\0' ) 
+    {
+	   h = h * seed + ( *str++ ); 
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -54,10 +57,13 @@ CEL_API uint32_t cel_fnv_hash( const char * str )
 {
     register uint32_t h = 2166136261UL;
     uint32_t prime = 16777619;
-    while ( *str != '\0' ) {
-	h *= prime;
-	h ^= *str++;
+
+    while ( *str != '\0' ) 
+    {
+    	h *= prime;
+    	h ^= *str++;
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -71,10 +77,13 @@ CEL_API uint32_t cel_fnv1a_hash( const char * str )
 {
     register uint32_t h = 2166136261UL;
     uint32_t prime = 16777619;
-    while ( *str != '\0' ) {
-	h ^= (*str++);
-	h *= prime;
+
+    while ( *str != '\0' ) 
+    {
+    	h ^= (*str++);
+    	h *= prime;
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -85,13 +94,19 @@ CEL_API uint32_t cel_fnv1a_hash( const char * str )
 CEL_API uint32_t cel_ap_hash( const char * str )
 {
     register uint32_t i = 0, h = 0;
-    while ( *str != '\0' ) {
-	if ( (i++ & 1) == 0) {
-	    h ^= ( (h << 7) ^ (*str++) ^ (h << 3) );
-	} else {
-	    h ^= ( ~( (h << 11) ^ (*str++) ^ (h << 5) ) );
-	}
+
+    while ( *str != '\0' ) 
+    {
+    	if ( (i++ & 1) == 0) 
+        {
+    	    h ^= ( (h << 7) ^ (*str++) ^ (h << 3) );
+    	} 
+        else 
+        {
+    	    h ^= ( ~( (h << 11) ^ (*str++) ^ (h << 5) ) );
+    	}
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -102,9 +117,12 @@ CEL_API uint32_t cel_ap_hash( const char * str )
 CEL_API uint32_t cel_djp_hash( const char * str )
 {
     register uint32_t h = 5381;
-    while ( *str != '\0' ) {
-	h += (h << 5) + (*str++);
+
+    while ( *str != '\0' ) 
+    {
+	   h += (h << 5) + (*str++);
     }
+
     return ( h & 0x7FFFFFFF );
 }
 
@@ -115,9 +133,12 @@ CEL_API uint32_t cel_djp_hash( const char * str )
 CEL_API uint32_t cel_djp2_hash( const char * str )
 {
     register uint32_t h = 5381;
-    while ( *str != '\0' ) {
-	h = h * 33 ^ (*str++);
+
+    while ( *str != '\0' ) 
+    {
+	   h = h * 33 ^ (*str++);
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -128,9 +149,12 @@ CEL_API uint32_t cel_djp2_hash( const char * str )
 CEL_API uint32_t cel_js_hash( const char * str )
 {
     register uint32_t h = 0;
-    while ( *str != '\0' ) {
-	h ^= ( (h << 5) + (*str++) + (h << 2) );
+
+    while ( *str != '\0' ) 
+    {
+	   h ^= ( (h << 5) + (*str++) + (h << 2) );
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -141,9 +165,12 @@ CEL_API uint32_t cel_js_hash( const char * str )
 CEL_API uint32_t cel_sdms_hash( const char * str )
 {
     register uint32_t h = 0;
-    while ( *str != '\0' ) {
-	h = 65599 * h + (*str++);
+
+    while ( *str != '\0' ) 
+    {
+	   h = 65599 * h + (*str++);
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -155,10 +182,13 @@ CEL_API uint32_t cel_rs_hash( const char * str )
 {
     register uint32_t h = 0;
     register uint32_t magic = 63689;
-    while ( *str != '\0' ) {
-	h = h * magic + (*str++);
-	magic *= 378551;
+
+    while ( *str != '\0' ) 
+    {
+	   h = h * magic + (*str++);
+	   magic *= 378551;
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -170,9 +200,12 @@ CEL_API uint32_t cel_rs_hash( const char * str )
 CEL_API uint32_t cel_dek_hash( const char * str )
 {
     register uint32_t h = 0;
-    while ( *str != '\0' ) {
-	h = ( (h << 5) ^ (h >> 27) ^ (*str++) );
+
+    while ( *str != '\0' ) 
+    {
+	   h = ( (h << 5) ^ (h >> 27) ^ (*str++) );
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -184,13 +217,17 @@ CEL_API uint32_t cel_elf_hash( const char * str )
 {
     register uint32_t h = 0;
     register uint32_t x = 0;
-    while ( *str != '\0' ) {
-	h = (h << 24) + (*str++);
-	if ( (x = h & 0xF0000000L) != 0 ) {
-	    h ^= (h >> 24);
-	    h &= ~x;
-	}
+
+    while ( *str != '\0' ) 
+    {
+    	h = (h << 24) + (*str++);
+    	if ( (x = h & 0xF0000000L) != 0 ) 
+        {
+    	    h ^= (h >> 24);
+    	    h &= ~x;
+    	}
     }
+
     return (h & 0x7FFFFFFF);
 }
 
@@ -229,31 +266,31 @@ CEL_API uint32_t cel_bobJenkins_hash32(
     //handle most of the bytes of the str
     while ( len >= 12 )
     {
-	a += get32bits(k);
-	b += get32bits(k + 4);
-	c += get32bits(k + 8);
-	cel_bj_mix(a, b, c);
-	k += 12; len -= 12;
+    	a += get32bits(k);
+    	b += get32bits(k + 4);
+    	c += get32bits(k + 8);
+    	cel_bj_mix(a, b, c);
+    	k += 12; len -= 12;
     }
 
     //handle the last 11 bytes
     c += length;
     switch ( len ) 
     {
-	/* all the case statements fall through */
-	case 11: c+=((uint32_t)k[10]<<24);
-	case 10: c+=((uint32_t)k[9]<<16);
-	case 9 : c+=((uint32_t)k[8]<<8);
-		 // the first byte of c is reserved for the length 
-	case 8 : b+=((uint32_t)k[7]<<24);
-	case 7 : b+=((uint32_t)k[6]<<16);
-	case 6 : b+=((uint32_t)k[5]<<8);
-	case 5 : b+=k[4];
-	case 4 : a+=((uint32_t)k[3]<<24);
-	case 3 : a+=((uint32_t)k[2]<<16);
-	case 2 : a+=((uint32_t)k[1]<<8);
-	case 1 : a+=k[0];
-		 /* case 0: nothing left to add */
+    	/* all the case statements fall through */
+    	case 11: c+=((uint32_t)k[10]<<24);
+    	case 10: c+=((uint32_t)k[9]<<16);
+    	case 9 : c+=((uint32_t)k[8]<<8);
+    		 // the first byte of c is reserved for the length 
+    	case 8 : b+=((uint32_t)k[7]<<24);
+    	case 7 : b+=((uint32_t)k[6]<<16);
+    	case 6 : b+=((uint32_t)k[5]<<8);
+    	case 5 : b+=k[4];
+    	case 4 : a+=((uint32_t)k[3]<<24);
+    	case 3 : a+=((uint32_t)k[2]<<16);
+    	case 2 : a+=((uint32_t)k[1]<<8);
+    	case 1 : a+=k[0];
+    		 /* case 0: nothing left to add */
     }
     cel_bj_mix(a,b,c);
 
@@ -295,26 +332,26 @@ CEL_API uint32_t cel_murmur_hash32(
 
     while ( length >= 4 ) 
     {
-	k = *(uint32_t *) data;
+    	k = *(uint32_t *) data;
 
-	k *= m;
-	k ^= k >> r;
-	k *= m;
+    	k *= m;
+    	k ^= k >> r;
+    	k *= m;
 
-	h *= m;
-	h ^= k;
+    	h *= m;
+    	h ^= k;
 
-	data += 4;
-	length -= 4;
+    	data += 4;
+    	length -= 4;
     }
 
     //Handle the last few bytes of the input array.
     switch ( length ) 
     {
-	case 3: h ^= data[2] << 16; break;
-	case 2: h ^= data[1] << 8; break;
-	case 1: h ^= data[0];
-		h *= m;
+    	case 3: h ^= data[2] << 16; break;
+    	case 2: h ^= data[1] << 8; break;
+    	case 1: h ^= data[0];
+                h *= m;
     }
 
     //Do a few final mixes of the hash to ensure the last few

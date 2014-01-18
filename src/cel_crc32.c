@@ -138,9 +138,10 @@ CEL_API uint32_t cel_crc32( uint32_t crc, const void * data, size_t length )
     //print_crc32_table(crc32_table, "crc32_table");
     uchar_t * str = ( uchar_t * ) data;
 
-    for ( i = 0; i < length; i++ ) {
-	j = ((int)(crc >> 24) ^ *str++) & 0xFF;
-	crc = (crc << 8) ^ crc32_table[j];
+    for ( i = 0; i < length; i++ ) 
+    {
+	   j = ((int)(crc >> 24) ^ *str++) & 0xFF;
+	   crc = (crc << 8) ^ crc32_table[j];
     }
     crc = ~crc;
 
@@ -171,16 +172,16 @@ CEL_API void cel_crc32_file(
     //open the file.
     if ( ( stream = fopen(_file, "r") ) == NULL ) 
     {
-	printf("Error: unable to open file %s\n", _file);
-	*file_crc32 = crc;
-	return;
+    	printf("Error: unable to open file %s\n", _file);
+    	*file_crc32 = crc;
+    	return;
     }
 
     //read and count the crc32 code.
     while ( fgets(buffer, BUFSIZE, stream) != NULL )
     {
-	//printf("buffer: %s\n", buffer);
-	crc = cel_crc32( crc, buffer, strlen(buffer) );
+	   //printf("buffer: %s\n", buffer);
+	   crc = cel_crc32( crc, buffer, strlen(buffer) );
     }
     *file_crc32 = crc;
 

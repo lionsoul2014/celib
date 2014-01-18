@@ -128,7 +128,7 @@ CEL_API void cel_md5_update(
     /* Update number of bits */
     if ((context->count[0] += ((ulong_t)inputLen << 3)) 
 	    < ((ulong_t)inputLen << 3))
-	context->count[1]++;
+	   context->count[1]++;
     context->count[1] += ((ulong_t)inputLen >> 29);
 
     partLen = 64 - index;
@@ -136,17 +136,17 @@ CEL_API void cel_md5_update(
     //Transform as many times as possible.
     if ( inputLen >= partLen ) 
     {
-	//cel_mem_copy( input, &context->buffer[index], partLen );
-	memcpy( &context->buffer[index], input, partLen );
-	md5_transform( context->state, context->buffer );
+    	//cel_mem_copy( input, &context->buffer[index], partLen );
+    	memcpy( &context->buffer[index], input, partLen );
+    	md5_transform( context->state, context->buffer );
 
-	for ( i = partLen; i + 63 < inputLen; i += 64 )
-	    md5_transform( context->state, &input[i] );
+    	for ( i = partLen; i + 63 < inputLen; i += 64 )
+    	    md5_transform( context->state, &input[i] );
 
-	index = 0;
+    	index = 0;
     }
     else
-	i = 0;
+	   i = 0;
 
     /* Buffer remaining input */
     //cel_mem_copy( &input[i], &context->buffer[index], inputLen - i );
@@ -277,10 +277,10 @@ static void Encode(
 
     for ( i = 0, j = 0; j < len; i++, j += 4 ) 
     {
-	output[j  ] = (uchar_t)((input[i]     )  & 0xff);
-	output[j+1] = (uchar_t)((input[i] >> 8)  & 0xff);
-	output[j+2] = (uchar_t)((input[i] >> 16) & 0xff);
-	output[j+3] = (uchar_t)((input[i] >> 24) & 0xff);
+    	output[j  ] = (uchar_t)((input[i]     )  & 0xff);
+    	output[j+1] = (uchar_t)((input[i] >> 8)  & 0xff);
+    	output[j+2] = (uchar_t)((input[i] >> 16) & 0xff);
+    	output[j+3] = (uchar_t)((input[i] >> 24) & 0xff);
     }
 }
 
@@ -295,10 +295,10 @@ static void Decode(
 
     for ( i = 0, j = 0; j < len; i++, j += 4 )
     {
-	output[i] = ((ulong_t)input[j]) 
-	    | (((ulong_t)input[j+1]) << 8) 
-	    | (((ulong_t)input[j+2]) << 16) 
-	    | (((ulong_t)input[j+3]) << 24);
+    	output[i] = ((ulong_t)input[j]) 
+    	    | (((ulong_t)input[j+1]) << 8) 
+    	    | (((ulong_t)input[j+2]) << 16) 
+    	    | (((ulong_t)input[j+3]) << 24);
     }
 }
 
@@ -330,15 +330,17 @@ CEL_API int cel_md5_file(
     uchar_t buffer[1024];
 
     if ( ( file = fopen( filename, "rb" ) ) == NULL )
-	return -1;
-    else {
-	cel_md5_init( &context );
-	while ( (len = (int) fread( buffer, 1, 1024, file )) > 0 ) 
-	    cel_md5_update( &context, buffer, len );
-	cel_md5_final( &context, digest );
+	   return -1;
+    else 
+    {
+        cel_md5_init( &context );
 
-	//close the file
-	fclose( file );
+    	while ( (len = (int) fread( buffer, 1, 1024, file )) > 0 ) 
+    	    cel_md5_update( &context, buffer, len );
+    	cel_md5_final( &context, digest );
+
+    	//close the file
+    	fclose( file );
     }
 
     return 0;
