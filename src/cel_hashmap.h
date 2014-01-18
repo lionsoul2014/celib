@@ -68,7 +68,7 @@ typedef void ( * cel_hashmap_rcb_fn_t ) ( hashmap_node_t * );
  * @param	float
  * @return	cel_hashmap_t
  */
-CEL_API cel_hashmap_t *new_cel_hashmap_opacity( uint_t, float );
+CEL_API cel_hashmap_t *new_cel_hashmap_opacity( int, float );
 
 /*
  * free the specified cel hashmap.
@@ -86,7 +86,7 @@ CEL_API void free_cel_hashmap(
  * @param   float   the threshold of the hash map
  * @return  int 1 for success and 0 for failed
  */
-CEL_API int cel_hashmap_create( cel_hashmap_t *, uint_t, float );
+CEL_API int cel_hashmap_create( cel_hashmap_t *, int, float );
 
 /*
  * destroy the specified hashmap
@@ -139,6 +139,11 @@ typedef cel_hashmap_t cel_ihashmap_t;
  */
 //CEL_API void free_cel_ihashmap( cel_hashmap_t );
 #define free_cel_ihashmap( map, rfunc ) free_cel_hashmap( map, rfunc )
+
+#define cel_ihashmap_create( map, opacity, factor )\
+    cel_hashmap_create(map, opacity, factor)
+#define cel_ihashmap_destroy( map )\
+    cel_hashmap_destroy(map, NULL)
 
 /*
  * associated the key with the specified value .

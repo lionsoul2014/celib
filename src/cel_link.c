@@ -51,9 +51,8 @@ CEL_API void free_cel_link( cel_link_t **link,
     {
         cel_link_destroy(*link, relfunc);
         cel_free( *link );
+        *link = NULL;
     }
-    
-    link = NULL;
 }
 
 /*
@@ -104,7 +103,10 @@ CEL_API int cel_link_destroy(
         }
 
         cel_free( link->head );
+        link->head = NULL;
+        
         cel_free( link->tail );
+        link->tail = NULL;
     }
 
     return 1;

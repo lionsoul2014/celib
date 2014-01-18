@@ -31,7 +31,7 @@ typedef struct {
  * @param	uint_t
  * @return	cel_array_t *
  */
-CEL_API cel_array_t *new_cel_array_opacity( uint_t );
+CEL_API cel_array_t *new_cel_array_opacity( int );
 
 //free the specified cel array
 CEL_API void free_cel_array( cel_array_t **, cel_release_callback_fn_t );
@@ -40,9 +40,10 @@ CEL_API void free_cel_array( cel_array_t **, cel_release_callback_fn_t );
  * initialize the specified cel_array_t
  *
  * @param 	cel_array_t *
+ * @param	uint_t the opacity of the array - -1 to use the default opacity
  * @return 	1 for success and 0 for failed
  */
-CEL_API int cel_array_create( cel_array_t *, uint_t );
+CEL_API int cel_array_create( cel_array_t *, int );
 
 /*
  * destroy the specified cel_array_t

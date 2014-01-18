@@ -37,7 +37,7 @@ static void rebuild_hash( cel_hashmap_t * );
  * @return	cel_hashmap_t
  */
 CEL_API cel_hashmap_t *new_cel_hashmap_opacity( 
-		uint_t opacity, float factor )
+		int opacity, float factor )
 {
 	cel_hashmap_t *map = ( cel_hashmap_t * ) 
 		cel_malloc( sizeof( cel_hashmap_t ) );
@@ -69,9 +69,8 @@ CEL_API void free_cel_hashmap(
 	{
 		cel_hashmap_destroy(*hash, relfunc);
 		cel_free( *hash );
+		*hash = NULL;
 	}
-
-	hash = NULL;
 }
 
 /*
@@ -83,7 +82,7 @@ CEL_API void free_cel_hashmap(
  * @return  int 1 for success and 0 for failed
  */
 CEL_API int cel_hashmap_create( 
-		cel_hashmap_t *map, uint_t opacity, float factor )
+		cel_hashmap_t *map, int opacity, float factor )
 {
 	map->table = create_node_blocks( opacity );
 
@@ -127,6 +126,7 @@ CEL_API int cel_hashmap_destroy(
 
 		//free the table bucket
 		cel_free( hash->table );
+		hash->table = NULL;
 	}
 
 	return 1;

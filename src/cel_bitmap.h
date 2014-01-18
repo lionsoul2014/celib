@@ -25,7 +25,7 @@ typedef struct {
  * @param	uint_t
  * @return	cel_bitmap_t *
  */
-CEL_API cel_bitmap_t *new_cel_bitmap( uint_t );
+CEL_API cel_bitmap_t *new_cel_bitmap( int );
 
 //free the specified cel_bitmap_t
 CEL_API void free_cel_bitmap( cel_bitmap_t ** );
@@ -36,7 +36,7 @@ CEL_API void free_cel_bitmap( cel_bitmap_t ** );
  * @param	uint_t opacity of the bitmap
  * @return	int (1 for success and 0 for failed)
  */
-CEL_API int cel_bitmap_create( cel_bitmap_t *, uint_t );
+CEL_API int cel_bitmap_create( cel_bitmap_t *, int );
 
 /*
  * destroy the specified cel_bitmap_t

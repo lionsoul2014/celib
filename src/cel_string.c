@@ -49,10 +49,11 @@ CEL_API void free_cel_string( cel_string_t **cstr )
 	if ( *cstr != NULL )
 	{
 	    cel_free( (*cstr)->str );
-	    cel_free( *cstr );
-	}
+	    (*cstr)->str = NULL;
 
-	cstr = NULL;
+	    cel_free( *cstr );
+	    *cstr = NULL;
+	}
 }
 /* }}}*/
 
@@ -61,7 +62,7 @@ CEL_API void free_cel_string( cel_string_t **cstr )
 
 /* {{{ cel string buffer area.
  * */
-static cstring create_buffer( uint_t opacity )
+static cstring create_buffer( int opacity )
 {
     cstring str = ( cstring ) cel_malloc( opacity );
     if ( str == NULL ) return NULL;
@@ -69,14 +70,13 @@ static cstring create_buffer( uint_t opacity )
     return str;
 }
 
-/* resize the string buffer to a
- * 	specified opacity.
+/* resize the string buffer to a specified opacity
  *
  * @param	opacity - the new opacity
  * @return	int 1 for success and 0 for failed
  * */
 static int resize_buffer( 
-	cel_strbuff_t *sb, uint_t opacity )
+	cel_strbuff_t *sb, int opacity )
 {
 	uint_t length;
     cstring str = create_buffer( opacity );
@@ -100,7 +100,7 @@ static int resize_buffer(
 /* interface to create new cel_strbuff_entry
  *  or to initialize a specified cel_strbuff_entry.
  * */
-CEL_API cel_strbuff_t *new_cel_strbuff_opacity( uint_t opacity )
+CEL_API cel_strbuff_t *new_cel_strbuff_opacity( int opacity )
 {
     cel_strbuff_t *sb = ( cel_strbuff_t * ) 
 	cel_malloc( sizeof( cel_strbuff_t ) );
@@ -154,8 +154,8 @@ CEL_API void free_cel_strbuff( cel_strbuff_t **sb )
 	{
 	    cel_strbuff_destroy(*sb);
 	    cel_free( *sb );
+	    *sb = NULL;
 	}
-	sb = NULL;
 }
 
 /*
@@ -167,7 +167,7 @@ CEL_API void free_cel_strbuff( cel_strbuff_t **sb )
  * @return	int 1 for success and 0 for failed
  */
 CEL_API int cel_strbuff_create( 
-	cel_strbuff_t *sb, uint_t opacity, cstring str )
+	cel_strbuff_t *sb, int opacity, cstring str )
 {
 	uint_t len = 0;
     uint_t bytes = opacity;
@@ -204,6 +204,7 @@ CEL_API int cel_strbuff_destroy( cel_strbuff_t *sb )
 	if ( sb != NULL )
 	{
 		cel_free( sb->buffer );
+		sb->buffer = NULL;
 	}
 
 	return 1;

@@ -17,7 +17,7 @@ typedef struct {
 } cel_string_t;
 
 //function to create a new cel string.
-CEL_API cel_string_t *cel_string( cstring );
+CEL_API cel_string_t *new_cel_string( cstring );
 
 //function to free the specified cel string.
 CEL_API void free_cel_string( cel_string_t ** );
@@ -49,7 +49,7 @@ typedef struct {
 #define new_cel_strbuff() \
 	new_cel_strbuff_opacity(_CEL_DEFAULT_STRBUFF_OPACITY_)
 
-CEL_API cel_strbuff_t *new_cel_strbuff_opacity( uint_t );
+CEL_API cel_strbuff_t *new_cel_strbuff_opacity( int );
 CEL_API cel_strbuff_t *new_cel_strbuff_string( cstring );
 
 //free the specified string buffer.
@@ -63,7 +63,7 @@ CEL_API void free_cel_strbuff( cel_strbuff_t ** );
  * @param	cstring default string -  could be NULL
  * @return	int 1 for success and 0 for failed
  */
-CEL_API int cel_strbuff_create( cel_strbuff_t *, uint_t, cstring );
+CEL_API int cel_strbuff_create( cel_strbuff_t *, int, cstring );
 
 /*
  * destroy the specified cel_strbuff_t

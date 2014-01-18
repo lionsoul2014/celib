@@ -17,16 +17,16 @@ typedef struct {
     uint_t 	size;
     char 	*str;
     //about the hash functions
-    cel_hash_fn_t * hfuncs;
+    cel_hash_fn_t *hfuncs;
     uint_t hlength;
     uint_t hsize;
 } cel_bloomfilter_t;
 
 //quick macro define
-#define cel_bloomfilter_length( bloom ) bloom->length
-#define cel_bloomfilter_size( bloom ) bloom->size
-#define cel_bloomfilter_hlength( bloom ) bloom->hlength
-#define cel_bloomfilter_hsize( bloom ) bloom->hsize
+#define cel_bloomfilter_length( bloom )		bloom->length
+#define cel_bloomfilter_size( bloom ) 		bloom->size
+#define cel_bloomfilter_hlength( bloom ) 	bloom->hlength
+#define cel_bloomfilter_hsize( bloom ) 		bloom->hsize
 
 /**
  * create a new bloom filter with a specified length.
@@ -35,7 +35,7 @@ typedef struct {
  * @param	hfuncs
  * @return	cel_bloomfilter_t *
  */
-CEL_API cel_bloomfilter_t *new_cel_bloomfilter( uint_t, uint_t );
+CEL_API cel_bloomfilter_t *new_cel_bloomfilter( int, int );
 
 //free the specified bloom filter.
 CEL_API void free_cel_bloomfilter( cel_bloomfilter_t ** );
@@ -63,7 +63,7 @@ CEL_API void free_cel_bloomfilter( cel_bloomfilter_t ** );
  * @param	length
  * @return	cel_bloomfilter_t *
  */
-CEL_API int cel_bloomfilter_create( cel_bloomfilter_t *, uint_t, uint_t );
+CEL_API int cel_bloomfilter_create( cel_bloomfilter_t *, int, int );
 
 /*
  * destroy the specified bloomfilter

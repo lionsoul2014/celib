@@ -13,7 +13,7 @@
  * @param	opacity
  * @return	cel_bitmap_t *
  */
-CEL_API cel_bitmap_t *new_cel_bitmap( uint_t opacity )
+CEL_API cel_bitmap_t *new_cel_bitmap( int opacity )
 {
     cel_bitmap_t *map = ( cel_bitmap_t * ) cel_malloc( sizeof( cel_bitmap_t ) );
     if ( map == NULL ) 
@@ -38,9 +38,8 @@ CEL_API void free_cel_bitmap( cel_bitmap_t **map )
     {
 	   cel_bitmap_destroy(*map);
 	   cel_free(*map);
+       *map = NULL;
     }
-
-    map = NULL;
 }
 
 /*
@@ -49,7 +48,7 @@ CEL_API void free_cel_bitmap( cel_bitmap_t **map )
  * @param   uint_t opacity of the bitmap
  * @return  int (1 for success and 0 for failed)
  */
-CEL_API int cel_bitmap_create( cel_bitmap_t *map, uint_t opacity )
+CEL_API int cel_bitmap_create( cel_bitmap_t *map, int opacity )
 {
     uint_t bytes = (opacity + CHAR_BIT - 1) / CHAR_BIT;
     map->bit = (char *) cel_calloc( sizeof(char), bytes );
@@ -74,6 +73,7 @@ CEL_API int cel_bitmap_destroy( cel_bitmap_t *map )
     if ( map != NULL )
     {
         cel_free(map->bit);
+        map->bit = NULL;
     }
 
     return 1;

@@ -24,7 +24,7 @@ static void resize_array( cel_array_t *, uint_t );
 //} 
 
 //create a new cel array with a specified size
-CEL_API cel_array_t *new_cel_array_opacity( uint_t opacity ) 
+CEL_API cel_array_t *new_cel_array_opacity( int opacity ) 
 {
     cel_array_t *ptr = ( cel_array_t * ) cel_malloc( sizeof( cel_array_t ) );
     if ( ptr == NULL ) 
@@ -43,19 +43,15 @@ CEL_API cel_array_t *new_cel_array_opacity( uint_t opacity )
 
 //free the specified cel array
 CEL_API void free_cel_array( 
-    cel_array_t **arr, cel_release_callback_fn_t relfunc ) 
+    cel_array_t **array, cel_release_callback_fn_t relfunc ) 
 {
-    cel_array_t *array;
-
-    if ( arr == NULL ) return;
-    if ( *arr != NULL )
+    if ( array == NULL ) return;
+    if ( *array != NULL )
     {
-        array = *arr;
-        cel_array_destroy(array, relfunc); 
-        cel_free( array );
+        cel_array_destroy(*array, relfunc); 
+        cel_free( *array );
+        *array = NULL;
     }
-
-    arr = NULL;
 }
 
 /*
@@ -64,8 +60,11 @@ CEL_API void free_cel_array(
  * @param   cel_array_t *
  * @return  1 for success and 0 for failed
  */
-CEL_API int cel_array_create( cel_array_t *array, uint_t opacity )
+CEL_API int cel_array_create( cel_array_t *array, int opacity )
 {
+    //check and use default opacity
+    if ( opacity < 0 ) opacity = _cel_array_default_length;
+
     array->items = create_array_blocks( opacity ); 
     if ( array->items == NULL ) return 0;
     array->length = opacity;
@@ -94,6 +93,7 @@ CEL_API int cel_array_destroy(
         }
 
         cel_free( array->items );
+        array->items = NULL;
     }
 
     return 1;
