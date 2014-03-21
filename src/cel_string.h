@@ -63,7 +63,7 @@ CEL_API void free_cel_strbuff( cel_strbuff_t ** );
  * @param	cstring default string -  could be NULL
  * @return	int 1 for success and 0 for failed
  */
-CEL_API int cel_strbuff_create( cel_strbuff_t *, int, cstring );
+CEL_API int cel_strbuff_init( cel_strbuff_t *, int, cstring );
 
 /*
  * destroy the specified cel_strbuff_t

@@ -30,7 +30,7 @@ CEL_API cel_bloomfilter_t *new_cel_bloomfilter(
         CEL_ALLOCATE_ERROR("new_cel_bloomfilter", sizeof(cel_bloomfilter_t));
     }
 
-    if ( cel_bloomfilter_create(bloom, length, hfuncs) == 0 )
+    if ( cel_bloomfilter_init(bloom, length, hfuncs) == 0 )
     {
         cel_free(bloom);
         CEL_ALLOCATE_ERROR("cel_bloomfilter_create", length / CHAR_BIT);
@@ -74,7 +74,7 @@ CEL_API void free_cel_bloomfilter( cel_bloomfilter_t **bloom )
  * @param	length
  * @return	cel_bloomfilter_t
  */
-CEL_API int cel_bloomfilter_create( 
+CEL_API int cel_bloomfilter_init( 
         cel_bloomfilter_t *bloom, 
         int length, int hfuncs )
 {

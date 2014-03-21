@@ -19,23 +19,23 @@
 #define CEL_HASHMAP_STORE_HCODE
 
 //hashmap node struct
-struct hashmap_node_struct {
-    char * key;
+struct cel_hashmap_node_struct {
+    char *key;
     //value union
     union {
-	   void * ptr;
+	   void *ptr;
 	   int num;
     } value;
-    struct hashmap_node_struct * next;
+    struct cel_hashmap_node_struct *next;
 #ifdef CEL_HASHMAP_STORE_HCODE
     uint_t hash;
 #endif
 };
-typedef struct hashmap_node_struct hashmap_node_t;
+typedef struct cel_hashmap_node_struct cel_hashmap_node_t;
 
 //cel hashmap entry
 typedef struct {
-    hashmap_node_t **table;
+    cel_hashmap_node_t **table;
     uint_t length;
     uint_t size;
     uint_t threshold;
@@ -43,7 +43,7 @@ typedef struct {
 } cel_hashmap_t;
 
 //cel hashmap release callback function pointer
-typedef void ( * cel_hashmap_rcb_fn_t ) ( hashmap_node_t * );
+typedef void ( * cel_hashmap_rcb_fn_t ) ( cel_hashmap_node_t * );
 
 //quick lanch macro define
 #define cel_hashmap_size( map )         map->size
@@ -53,7 +53,7 @@ typedef void ( * cel_hashmap_rcb_fn_t ) ( hashmap_node_t * );
 
 /*
  * create a default cel hashmap with a default
- * 	length and default factor .
+ * 	length and default factor
  *
  * @return	cel_hashmap_t
  */
@@ -86,7 +86,7 @@ CEL_API void free_cel_hashmap(
  * @param   float   the threshold of the hash map
  * @return  int 1 for success and 0 for failed
  */
-CEL_API int cel_hashmap_create( cel_hashmap_t *, int, float );
+CEL_API int cel_hashmap_init( cel_hashmap_t *, int, float );
 
 /*
  * destroy the specified hashmap
@@ -140,8 +140,8 @@ typedef cel_hashmap_t cel_ihashmap_t;
 //CEL_API void free_cel_ihashmap( cel_hashmap_t );
 #define free_cel_ihashmap( map, rfunc ) free_cel_hashmap( map, rfunc )
 
-#define cel_ihashmap_create( map, opacity, factor )\
-    cel_hashmap_create(map, opacity, factor)
+#define cel_ihashmap_init( map, opacity, factor )\
+    cel_hashmap_init(map, opacity, factor)
 #define cel_ihashmap_destroy( map )\
     cel_hashmap_destroy(map, NULL)
 

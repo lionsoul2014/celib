@@ -63,7 +63,7 @@ CEL_API void free_cel_bloomfilter( cel_bloomfilter_t ** );
  * @param	length
  * @return	cel_bloomfilter_t *
  */
-CEL_API int cel_bloomfilter_create( cel_bloomfilter_t *, int, int );
+CEL_API int cel_bloomfilter_init( cel_bloomfilter_t *, int, int );
 
 /*
  * destroy the specified bloomfilter

@@ -31,7 +31,7 @@ CEL_API void cel_subinsert_sort( void *,
  *
  * @param	length	- the length of the array. 
  * @param	size	- the bytes that one element in the array takes.
- * @param	comp	- comprare function.
+ * @param	comp	- comprare function
  */
 CEL_API void cel_shell_sort( void *, uint_t, uint_t, cel_compare_fn_t );
 

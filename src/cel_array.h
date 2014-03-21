@@ -43,7 +43,7 @@ CEL_API void free_cel_array( cel_array_t **, cel_release_callback_fn_t );
  * @param	uint_t the opacity of the array - -1 to use the default opacity
  * @return 	1 for success and 0 for failed
  */
-CEL_API int cel_array_create( cel_array_t *, int );
+CEL_API int cel_array_init( cel_array_t *, int );
 
 /*
  * destroy the specified cel_array_t
@@ -150,7 +150,7 @@ CEL_API void free_cel_intArray( cel_intArray_t ** );
  * @param	uint_t initialize opacity of the array
  * @return 	1 for success and 0 for failed
  */
-CEL_API int cel_intArray_create( cel_intArray_t *, uint_t );
+CEL_API int cel_intArray_init( cel_intArray_t *, uint_t );
 
 /*
  * destroy the specified cel_array_t

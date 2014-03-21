@@ -166,7 +166,7 @@ CEL_API void free_cel_strbuff( cel_strbuff_t **sb )
  * @param	cstring default string -  could be NULL
  * @return	int 1 for success and 0 for failed
  */
-CEL_API int cel_strbuff_create( 
+CEL_API int cel_strbuff_init( 
 	cel_strbuff_t *sb, int opacity, cstring str )
 {
 	uint_t len = 0;

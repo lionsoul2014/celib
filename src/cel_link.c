@@ -5,10 +5,10 @@
  */
 #include "cel_link.h"
 
-static link_node_t *create_link_node( void *, link_node_t *, link_node_t * );
-static void insert_before( link_node_t *, void * );
-static link_node_t *get_node( cel_link_t *, uint_t );
-//static inline void cel_remove_node( link_node_t * );
+static cel_link_node_t *create_link_node( void *, cel_link_node_t *, cel_link_node_t * );
+static void insert_before( cel_link_node_t *, void * );
+static cel_link_node_t *get_node( cel_link_t *, uint_t );
+//static inline void cel_remove_node( cel_link_node_t * );
 
 #define cel_remove_node( node )	\
     node->_prev->_next = node->_next;\
@@ -27,10 +27,10 @@ CEL_API cel_link_t *new_cel_link( void )
         CEL_ALLOCATE_ERROR("new_cel_link", sizeof(cel_link_t));
     }
 
-    if ( cel_link_create(ptr) == 0 )
+    if ( cel_link_init(ptr) == 0 )
     {
         cel_free(ptr);
-        CEL_ALLOCATE_ERROR("new_cel_link", sizeof(link_node_t));
+        CEL_ALLOCATE_ERROR("new_cel_link", sizeof(cel_link_node_t));
     }
 
     return ptr;
@@ -61,7 +61,7 @@ CEL_API void free_cel_link( cel_link_t **link,
  * @param   cel_link_t *
  * @return  int 1 for success and 0 for failed
  */
-CEL_API int cel_link_create( cel_link_t *link )
+CEL_API int cel_link_init( cel_link_t *link )
 {
     link->size = 0;
     link->tail = create_link_node( NULL, NULL, NULL );
@@ -89,7 +89,7 @@ CEL_API int cel_link_destroy(
         cel_link_t *link,
         cel_release_callback_fn_t relfunc )
 {
-    link_node_t *node;
+    cel_link_node_t *node;
 
     if ( link != NULL )
     {
@@ -118,13 +118,13 @@ CEL_API int cel_link_destroy(
  * @param   value
  * @param   _prev
  * @param   _next
- * @return  link_node_t
+ * @return  cel_link_node_t
  */
-static link_node_t *create_link_node( 
-        void * value, link_node_t *_prev, link_node_t *_next) 
+static cel_link_node_t *create_link_node( 
+        void * value, cel_link_node_t *_prev, cel_link_node_t *_next) 
 {
-    link_node_t *node = ( link_node_t * ) \
-            cel_malloc( sizeof( link_node_t ) );
+    cel_link_node_t *node = ( cel_link_node_t * ) \
+            cel_malloc( sizeof( cel_link_node_t ) );
     if ( node == NULL ) return NULL;
 
     node->value = value;
@@ -161,9 +161,9 @@ CEL_API void cel_link_add_last( cel_link_t *link, void *value )
  * @param	_old
  * @param	value
  */
-static void insert_before( link_node_t *_old, void *value )
+static void insert_before( cel_link_node_t *_old, void *value )
 {
-    link_node_t *o = create_link_node( value, _old->_prev, _old );
+    cel_link_node_t *o = create_link_node( value, _old->_prev, _old );
     if ( o != NULL )
     {
         o->_prev->_next = o;
@@ -179,7 +179,7 @@ static void insert_before( link_node_t *_old, void *value )
  */
 CEL_API void cel_link_insert( cel_link_t *link, uint_t idx, void *value ) 
 {
-    link_node_t *o = get_node( link, idx );
+    cel_link_node_t *o = get_node( link, idx );
     if ( o != NULL ) 
     {
 	   insert_before( o, value );
@@ -193,10 +193,10 @@ CEL_API void cel_link_insert( cel_link_t *link, uint_t idx, void *value )
  * @param	link
  * @param	idx
  */
-static link_node_t *get_node( cel_link_t *link, uint_t idx ) 
+static cel_link_node_t *get_node( cel_link_t *link, uint_t idx ) 
 {
     register uint_t i;
-    link_node_t *p;
+    cel_link_node_t *p;
 
     if ( idx >= link->size ) return NULL;
 
@@ -226,7 +226,7 @@ static link_node_t *get_node( cel_link_t *link, uint_t idx )
 CEL_API void *cel_link_remove( cel_link_t *link, uint_t idx ) 
 {
     void * v;
-    link_node_t *o = get_node( link, idx );
+    cel_link_node_t *o = get_node( link, idx );
     if ( o == NULL ) return NULL;
 
     //remove the node
@@ -238,7 +238,7 @@ CEL_API void *cel_link_remove( cel_link_t *link, uint_t idx )
     return v;
 }
 
-//static void cel_remove_node( link_node_t node ) 
+//static void cel_remove_node( cel_link_node_t node ) 
 //{
 //    node->_prev->_next = node->_next;
 //    node->_next->_prev = node->_prev;
@@ -248,7 +248,7 @@ CEL_API void *cel_link_remove( cel_link_t *link, uint_t idx )
 CEL_API void *cel_link_remove_first( cel_link_t *link ) 
 {
     void * v;
-	link_node_t *o;
+	cel_link_node_t *o;
 
     if ( link->size == 0 ) return NULL;
 
@@ -265,7 +265,7 @@ CEL_API void *cel_link_remove_first( cel_link_t *link )
 CEL_API void *cel_link_remove_last( cel_link_t *link ) 
 {
     void * v;
-	link_node_t *o;
+	cel_link_node_t *o;
 
     if ( link->size == 0 ) return NULL;
 
@@ -290,7 +290,7 @@ CEL_API void *cel_link_remove_obj(
 	cel_compare_fn_t comp ) 
 {
     void * v;
-    link_node_t *o;
+    cel_link_node_t *o;
 
     for ( o = link->head->_next;
 	    o != link->tail;
@@ -313,7 +313,7 @@ CEL_API void *cel_link_remove_obj(
 //get the element at the specified postion.
 CEL_API void *cel_link_get( cel_link_t *link, uint_t idx ) 
 {
-    link_node_t *o = get_node( link, idx  );
+    cel_link_node_t *o = get_node( link, idx  );
     if ( o == NULL ) return NULL;
     return o->value;
 }
@@ -330,7 +330,7 @@ CEL_API void *cel_link_set(
         cel_link_t *link, uint_t idx, void *value ) 
 {
     void *v;
-    link_node_t *old = get_node( link, idx );
+    cel_link_node_t *old = get_node( link, idx );
 
     if ( old == NULL ) return NULL;
 
@@ -349,7 +349,7 @@ CEL_API void * cel_link_set_obj(
 	cel_compare_fn_t comp )
 {
     void * v;
-    link_node_t *o;
+    cel_link_node_t *o;
 
     for ( o = link->head->_next;
 	    o != link->tail;

@@ -269,7 +269,7 @@ CEL_API int cel_rle_decode_file(
 
 //lzw encode dictionary hash release callback function.
 //free all the key.
-static void lzw_encode_rcb( hashmap_node_t *e ) 
+static void lzw_encode_rcb( cel_hashmap_node_t *e ) 
 {
 	cel_free( e->key );
 }
@@ -359,7 +359,7 @@ CEL_API int cel_lzw_encode_string(
 
 //lzw decode dictionary hash release callback function.
 //free all the key.
-static void lzw_decode_rcb( hashmap_node_t *e ) 
+static void lzw_decode_rcb( cel_hashmap_node_t *e ) 
 {
 	cel_free( e->key );
 	cel_free( e->value.ptr );

@@ -21,7 +21,7 @@ CEL_API cel_bitmap_t *new_cel_bitmap( int opacity )
         CEL_ALLOCATE_ERROR("new_cel_bitmap", sizeof(cel_bitmap_t));
     }
 
-    if ( cel_bitmap_create(map, opacity) == 0 )
+    if ( cel_bitmap_init(map, opacity) == 0 )
     {
         cel_free(map);
         CEL_ALLOCATE_ERROR("cel_bitmap_create", opacity);
@@ -48,7 +48,7 @@ CEL_API void free_cel_bitmap( cel_bitmap_t **map )
  * @param   uint_t opacity of the bitmap
  * @return  int (1 for success and 0 for failed)
  */
-CEL_API int cel_bitmap_create( cel_bitmap_t *map, int opacity )
+CEL_API int cel_bitmap_init( cel_bitmap_t *map, int opacity )
 {
     uint_t bytes = (opacity + CHAR_BIT - 1) / CHAR_BIT;
     map->bit = (char *) cel_calloc( sizeof(char), bytes );

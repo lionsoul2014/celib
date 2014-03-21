@@ -9,8 +9,8 @@
 #include "cel_hash.h"
 #include <string.h>
 
-static hashmap_node_t **create_node_blocks( uint_t );
-static hashmap_node_t *create_hashmap_node( char *, void *, hashmap_node_t * );
+static cel_hashmap_node_t **create_node_blocks( uint_t );
+static cel_hashmap_node_t *create_hashmap_node( char *, void *, cel_hashmap_node_t * );
 static void rebuild_hash( cel_hashmap_t * );
 
 //hash function marco define
@@ -46,7 +46,7 @@ CEL_API cel_hashmap_t *new_cel_hashmap_opacity(
 		CEL_ALLOCATE_ERROR("new_cel_hashmap_opacity", sizeof(cel_hashmap_t));
 	}
 
-	if ( cel_hashmap_create(map, opacity, factor) == 0 )
+	if ( cel_hashmap_init(map, opacity, factor) == 0 )
 	{
 		cel_free(map);
 		CEL_ALLOCATE_ERROR("cel_hashmap_create", opacity);
@@ -81,7 +81,7 @@ CEL_API void free_cel_hashmap(
  * @param   float   the threshold of the hash map
  * @return  int 1 for success and 0 for failed
  */
-CEL_API int cel_hashmap_create( 
+CEL_API int cel_hashmap_init( 
 		cel_hashmap_t *map, int opacity, float factor )
 {
 	map->table = create_node_blocks( opacity );
@@ -107,7 +107,7 @@ CEL_API int cel_hashmap_destroy(
 		cel_hashmap_rcb_fn_t relfunc )
 {
 	register uint_t idx;
-	hashmap_node_t *e, *next;
+	cel_hashmap_node_t *e, *next;
 
 	if ( hash != NULL )
 	{
@@ -134,12 +134,12 @@ CEL_API int cel_hashmap_destroy(
 
 
 //create a new hashmap node.
-static hashmap_node_t **create_node_blocks( uint_t __blocks )
+static cel_hashmap_node_t **create_node_blocks( uint_t __blocks )
 {
 	register uint_t i;
 
-	hashmap_node_t **table = ( hashmap_node_t ** ) 
-		cel_calloc( sizeof( hashmap_node_t * ), __blocks );
+	cel_hashmap_node_t **table = ( cel_hashmap_node_t ** ) 
+		cel_calloc( sizeof( cel_hashmap_node_t * ), __blocks );
 	if ( table == NULL ) return NULL;
 
 	//initialize the bucket
@@ -160,8 +160,8 @@ static void rebuild_hash( cel_hashmap_t *hash )
 	uint_t idx;
 
 	uint_t length = cel_next_prime(hash->length * 2 + 1);
-	hashmap_node_t **_table = create_node_blocks( length );
-	hashmap_node_t *e, *next;
+	cel_hashmap_node_t **_table = create_node_blocks( length );
+	cel_hashmap_node_t *e, *next;
 
 	if ( _table == NULL )
 	{
@@ -219,7 +219,7 @@ CEL_API void *cel_hashmap_put(
 		char *key, void *value )
 {
 	void * v;
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t hcode = cel_hash(key);
 	uint_t idx = hcode % hash->length;
 
@@ -261,15 +261,15 @@ CEL_API void *cel_hashmap_put(
  * @param	value
  * @param	next
  */
-static hashmap_node_t *create_hashmap_node( 
+static cel_hashmap_node_t *create_hashmap_node( 
 		char *key, void *value,
-		hashmap_node_t *next )
+		cel_hashmap_node_t *next )
 {
-	hashmap_node_t *node = ( hashmap_node_t * ) 
-		cel_malloc( sizeof( hashmap_node_t ) );
+	cel_hashmap_node_t *node = ( cel_hashmap_node_t * ) 
+		cel_malloc( sizeof( cel_hashmap_node_t ) );
 	if ( node == NULL ) 
 	{
-		CEL_ALLOCATE_ERROR("create_hashmap_node", sizeof(hashmap_node_t));
+		CEL_ALLOCATE_ERROR("create_hashmap_node", sizeof(cel_hashmap_node_t));
 	}
 
 	node->key = key;
@@ -285,7 +285,7 @@ CEL_API void *cel_hashmap_remove(
 		cel_hashmap_rcb_fn_t rfunc )
 {
 	void * v;
-	hashmap_node_t *e, *prev = NULL;
+	cel_hashmap_node_t *e, *prev = NULL;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx]; 
@@ -318,7 +318,7 @@ CEL_API void *cel_hashmap_remove(
 CEL_API void * cel_hashmap_get( 
 		cel_hashmap_t *hash, char *key )
 {
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx];
@@ -339,7 +339,7 @@ CEL_API void * cel_hashmap_get(
 CEL_API int cel_hashmap_exists( 
 		cel_hashmap_t *hash, char *key )
 {
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx];
@@ -362,7 +362,7 @@ CEL_API void *cel_hashmap_set(
 		char *key, void *value )
 {
 	void * v;
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx];
@@ -393,16 +393,16 @@ CEL_API void *cel_hashmap_set(
  * @param	value
  * @param	next
  */
-static hashmap_node_t *create_ihashmap_node( 
+static cel_hashmap_node_t *create_ihashmap_node( 
 		char *key,
 		int value,
-		hashmap_node_t *next )
+		cel_hashmap_node_t *next )
 {
-	hashmap_node_t *node = ( hashmap_node_t * ) \
-			cel_malloc( sizeof( hashmap_node_t ) );
+	cel_hashmap_node_t *node = ( cel_hashmap_node_t * ) \
+			cel_malloc( sizeof( cel_hashmap_node_t ) );
 	if ( node == NULL ) 
 	{
-		CEL_ALLOCATE_ERROR("create_ihashmap_node", sizeof(hashmap_node_t));	
+		CEL_ALLOCATE_ERROR("create_ihashmap_node", sizeof(cel_hashmap_node_t));	
 	}
 
 	node->key = key;
@@ -422,7 +422,7 @@ static hashmap_node_t *create_ihashmap_node(
 CEL_API int cel_ihashmap_put( 
 		cel_ihashmap_t *hash, char *key, int value )
 {
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t hcode = cel_hash(key);
 	uint_t idx = hcode % hash->length;
 
@@ -458,7 +458,7 @@ CEL_API int cel_ihashmap_remove(
 		cel_ihashmap_t *hash, char *key, 
 		cel_hashmap_rcb_fn_t rfunc )
 {
-	hashmap_node_t *e, *prev = NULL;
+	cel_hashmap_node_t *e, *prev = NULL;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx]; 
@@ -490,7 +490,7 @@ CEL_API int cel_ihashmap_remove(
 CEL_API int cel_ihashmap_get( 
 		cel_ihashmap_t *hash, char *key )
 {
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx];
@@ -511,7 +511,7 @@ CEL_API int cel_ihashmap_get(
 CEL_API int cel_ihashmap_exists( 
 		cel_ihashmap_t *hash, char *key )
 {
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx];
@@ -532,7 +532,7 @@ CEL_API int cel_ihashmap_exists(
 CEL_API int cel_ihashmap_set( 
 		cel_ihashmap_t *hash, char *key, int value )
 {
-	hashmap_node_t *e;
+	cel_hashmap_node_t *e;
 	uint_t idx = cel_hash( key ) % hash->length;
 
 	for ( e = hash->table[idx];

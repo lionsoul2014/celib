@@ -8,17 +8,17 @@
 
 #include "cel_api.h"
 
-struct link_node_struct {
+struct cel_link_node_struct {
     void *value;
-    struct link_node_struct *_prev;
-    struct link_node_struct *_next;
+    struct cel_link_node_struct *_prev;
+    struct cel_link_node_struct *_next;
 };
-typedef struct link_node_struct link_node_t;
+typedef struct cel_link_node_struct cel_link_node_t;
 
 typedef struct {
     uint_t size;	
-    link_node_t *head;
-    link_node_t *tail;
+    cel_link_node_t *head;
+    cel_link_node_t *tail;
 } cel_link_t;
 
 /**
@@ -41,7 +41,7 @@ CEL_API void free_cel_link( cel_link_t **, cel_release_callback_fn_t );
  * @param	cel_link_t *
  * @return	int 1 for success and 0 for failed
  */
-CEL_API int cel_link_create( cel_link_t * );
+CEL_API int cel_link_init( cel_link_t * );
 
 /*
  * destroy the specified cel_link_t

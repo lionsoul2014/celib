@@ -32,7 +32,7 @@ CEL_API cel_array_t *new_cel_array_opacity( int opacity )
 	   CEL_ALLOCATE_ERROR("new_cel_array_opacity", sizeof(cel_array_t));
     }
 
-    if ( cel_array_create(ptr, opacity) == 0 )
+    if ( cel_array_init(ptr, opacity) == 0 )
     {
         cel_free(ptr);
         CEL_ALLOCATE_ERROR("cel_array_create", opacity);
@@ -60,7 +60,7 @@ CEL_API void free_cel_array(
  * @param   cel_array_t *
  * @return  1 for success and 0 for failed
  */
-CEL_API int cel_array_create( cel_array_t *array, int opacity )
+CEL_API int cel_array_init( cel_array_t *array, int opacity )
 {
     //check and use default opacity
     if ( opacity < 0 ) opacity = _cel_array_default_length;
@@ -306,7 +306,7 @@ CEL_API cel_intArray_t *new_cel_intArray_opacity( uint_t opacity )
 	   CEL_ALLOCATE_ERROR("new_cel_intArray_opacity", sizeof(cel_intArray_t));
     }
 
-    if ( cel_intArray_create(ptr, opacity) == 0 )
+    if ( cel_intArray_init(ptr, opacity) == 0 )
     {
         cel_free(ptr);
         CEL_ALLOCATE_ERROR("cel_intArray_create", opacity);
@@ -338,7 +338,7 @@ CEL_API void free_cel_intArray( cel_intArray_t **arr )
  * @param   uint_t initialize opacity of the array
  * @return  1 for success and 0 for failed
  */
-CEL_API int cel_intArray_create( cel_intArray_t *array, uint_t opacity )
+CEL_API int cel_intArray_init( cel_intArray_t *array, uint_t opacity )
 {
     array->items = create_int_blocks( opacity );
     if ( array->items == NULL ) return 0;
