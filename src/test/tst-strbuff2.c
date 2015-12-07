@@ -14,7 +14,7 @@ int main( int argc, char *args[] )
     //apend the string.
     int i;
     for ( i = 0; i < 44; i++ )
-	   cel_strbuff_append_char(sb, str[i], 1);
+       cel_strbuff_append_char(sb, str[i], 1);
     
     cel_strbuff_append(sb, ".", 1);
     printf("length=%d, size=%d\n", sb->opacity, sb->size);

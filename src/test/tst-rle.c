@@ -28,7 +28,7 @@ int main( int argc, char *args[] )
     //Count the compress
     printf("ensb->buffer=%s\n", ensb->buffer);
     printf("inlen=%d, flen=%d, bit=%.2f\n", inlen, 
-	    ensb->length, ((float)ensb->length/(float)inlen));
+        ensb->length, ((float)ensb->length/(float)inlen));
 
     putchar('\n');
     printf("+---test decode: \n");

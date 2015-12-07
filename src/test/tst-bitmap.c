@@ -19,7 +19,7 @@ int main( int argc, char *args[] )
     //set the bits
     for ( i = 0; i < length; i++ ) 
     {
-	   cel_bitmap_set( bitmap, a[i] );
+       cel_bitmap_set( bitmap, a[i] );
     }
 
     printf("+---bitmap bucket sort: \n");
@@ -27,23 +27,23 @@ int main( int argc, char *args[] )
     //get the bits
     for ( i = 0; i < bitmap->length; i++ ) 
     {
-    	if ( cel_bitmap_get(bitmap, i) == 1 ) 
+        if ( cel_bitmap_get(bitmap, i) == 1 ) 
         {
-    	    //printf("1");
-    	    printf("%3d", i);
-    	} /*else {
-    	    printf("0");
-    	}*/
+            //printf("1");
+            printf("%3d", i);
+        } /*else {
+            printf("0");
+        }*/
     }
     putchar('\n');
 
     cel_bitmap_remove( bitmap, 3 );
     for ( i = 0; i < bitmap->length; i++ ) 
     {
-    	if ( cel_bitmap_get(bitmap, i) == 1 ) 
+        if ( cel_bitmap_get(bitmap, i) == 1 ) 
         {
-    	    printf("%3d", i);
-    	}
+            printf("%3d", i);
+        }
     }
     putchar('\n');
 

@@ -21,7 +21,7 @@ int main( int argc, char *args[] )
     //little-endian for local store.
     printf("+---test char ptr: \n");
     for ( i = 0; i < sizeof(uint_t); i++ ) 
-	printf("byte-%d, %2c, %p\n", i, str[i], &str[i] );
+    printf("byte-%d, %2c, %p\n", i, str[i], &str[i] );
     putchar('\n');
 
     //package them in bit-endian.

@@ -1,6 +1,6 @@
 /**
  * md5 (message-digest algorithm) implemented source file.
- * 	@package src/cel_md5.c
+ *     @package src/cel_md5.c
  *
  * Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
  * rights reserved.
@@ -111,14 +111,14 @@ CEL_API void cel_md5_init( cel_md5_t context )
 
 /*
  * md5 block update operation.
- * 	continue an md5 message-digest operation, processing
- * 	another message block and update the context.
+ *     continue an md5 message-digest operation, processing
+ *     another message block and update the context.
  *
- * @param	input	- the block.
- * @param	length	- the length of the input in bytes.
+ * @param    input    - the block.
+ * @param    length    - the length of the input in bytes.
  */
 CEL_API void cel_md5_update( 
-	cel_md5_t context, uchar_t * input, uint_t inputLen )
+    cel_md5_t context, uchar_t * input, uint_t inputLen )
 {
     uint_t i, index, partLen;
 
@@ -127,8 +127,8 @@ CEL_API void cel_md5_update(
 
     /* Update number of bits */
     if ((context->count[0] += ((ulong_t)inputLen << 3)) 
-	    < ((ulong_t)inputLen << 3))
-	   context->count[1]++;
+        < ((ulong_t)inputLen << 3))
+       context->count[1]++;
     context->count[1] += ((ulong_t)inputLen >> 29);
 
     partLen = 64 - index;
@@ -136,17 +136,17 @@ CEL_API void cel_md5_update(
     //Transform as many times as possible.
     if ( inputLen >= partLen ) 
     {
-    	//cel_mem_copy( input, &context->buffer[index], partLen );
-    	memcpy( &context->buffer[index], input, partLen );
-    	md5_transform( context->state, context->buffer );
+        //cel_mem_copy( input, &context->buffer[index], partLen );
+        memcpy( &context->buffer[index], input, partLen );
+        md5_transform( context->state, context->buffer );
 
-    	for ( i = partLen; i + 63 < inputLen; i += 64 )
-    	    md5_transform( context->state, &input[i] );
+        for ( i = partLen; i + 63 < inputLen; i += 64 )
+            md5_transform( context->state, &input[i] );
 
-    	index = 0;
+        index = 0;
     }
     else
-	   i = 0;
+       i = 0;
 
     /* Buffer remaining input */
     //cel_mem_copy( &input[i], &context->buffer[index], inputLen - i );
@@ -271,16 +271,16 @@ md5_transform( ulong_t state[4], uchar_t block[64] )
  *   a multiple of 4.
  */
 static void Encode( 
-	uchar_t * output, ulong_t * input, uint_t len )
+    uchar_t * output, ulong_t * input, uint_t len )
 {
     uint_t i, j;
 
     for ( i = 0, j = 0; j < len; i++, j += 4 ) 
     {
-    	output[j  ] = (uchar_t)((input[i]     )  & 0xff);
-    	output[j+1] = (uchar_t)((input[i] >> 8)  & 0xff);
-    	output[j+2] = (uchar_t)((input[i] >> 16) & 0xff);
-    	output[j+3] = (uchar_t)((input[i] >> 24) & 0xff);
+        output[j  ] = (uchar_t)((input[i]     )  & 0xff);
+        output[j+1] = (uchar_t)((input[i] >> 8)  & 0xff);
+        output[j+2] = (uchar_t)((input[i] >> 16) & 0xff);
+        output[j+3] = (uchar_t)((input[i] >> 24) & 0xff);
     }
 }
 
@@ -289,27 +289,27 @@ static void Encode(
  *   a multiple of 4.
  */
 static void Decode( 
-	ulong_t * output, uchar_t * input, uint_t len )
+    ulong_t * output, uchar_t * input, uint_t len )
 {
     uint_t i, j;
 
     for ( i = 0, j = 0; j < len; i++, j += 4 )
     {
-    	output[i] = ((ulong_t)input[j]) 
-    	    | (((ulong_t)input[j+1]) << 8) 
-    	    | (((ulong_t)input[j+2]) << 16) 
-    	    | (((ulong_t)input[j+3]) << 24);
+        output[i] = ((ulong_t)input[j]) 
+            | (((ulong_t)input[j+1]) << 8) 
+            | (((ulong_t)input[j+2]) << 16) 
+            | (((ulong_t)input[j+3]) << 24);
     }
 }
 
 /*
  * MD5 hash algorithm.
- * 	Message digest Algorithm 5.
+ *     Message digest Algorithm 5.
  *
  * Digest a string and get the results.
  */
 CEL_API void cel_md5_string( 
-	const cstring str, uchar_t digest[16] )
+    const cstring str, uchar_t digest[16] )
 {
     cel_md5_entry context;
     uint_t len = strlen( str );
@@ -322,7 +322,7 @@ CEL_API void cel_md5_string(
 /* Digest a file and get the result.
  * */
 CEL_API int cel_md5_file( 
-	const cstring filename, uchar_t digest[16] )
+    const cstring filename, uchar_t digest[16] )
 {
     cel_md5_entry context;
     FILE * file;
@@ -330,17 +330,17 @@ CEL_API int cel_md5_file(
     uchar_t buffer[1024];
 
     if ( ( file = fopen( filename, "rb" ) ) == NULL )
-	   return -1;
+       return -1;
     else 
     {
         cel_md5_init( &context );
 
-    	while ( (len = (int) fread( buffer, 1, 1024, file )) > 0 ) 
-    	    cel_md5_update( &context, buffer, len );
-    	cel_md5_final( &context, digest );
+        while ( (len = (int) fread( buffer, 1, 1024, file )) > 0 ) 
+            cel_md5_update( &context, buffer, len );
+        cel_md5_final( &context, digest );
 
-    	//close the file
-    	fclose( file );
+        //close the file
+        fclose( file );
     }
 
     return 0;

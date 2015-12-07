@@ -33,9 +33,9 @@ int main( int argc, char *args[] )
     printf("+---test get: \n");
     for ( i = 1; i <= 8; i++ ) 
     {
-    	buff[0] = '0';
-    	buff[1] = i+'0';
-    	printf("get(\"%s\")=%d\n", buff, cel_ihashmap_get(imap, buff));
+        buff[0] = '0';
+        buff[1] = i+'0';
+        printf("get(\"%s\")=%d\n", buff, cel_ihashmap_get(imap, buff));
     }
 
     printf("+---test remove: \n");
@@ -46,9 +46,9 @@ int main( int argc, char *args[] )
     printf("+--test exists: \n");
     for ( i = 1; i < 10; i++ ) 
     {
-    	buff[0] = '0';
-    	buff[1] = '0'+i;
-    	printf("exists(\"%s\")=%d\n", buff, cel_ihashmap_exists(imap, buff));
+        buff[0] = '0';
+        buff[1] = '0'+i;
+        printf("exists(\"%s\")=%d\n", buff, cel_ihashmap_exists(imap, buff));
     }
 
     //free_cel_ihashmap( &imap, NULL );

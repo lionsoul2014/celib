@@ -28,10 +28,10 @@ int main( int argc, char *args[] )
     printf("+---test encode: \n");
     int r = cel_lzw_encode_string(str, len, ensb);
     if ( r == 0 ) 
-	printf("error: unable to compress the string.");
+    printf("error: unable to compress the string.");
     else {
-	printf("data=%s\n", ensb->buffer);
-	printf("size=%d, radio=%.2f\n", ensb->size, ((float)ensb->size)/((float)len));
+    printf("data=%s\n", ensb->buffer);
+    printf("size=%d, radio=%.2f\n", ensb->size, ((float)ensb->size)/((float)len));
     }
     putchar('\n');
 
@@ -41,7 +41,7 @@ int main( int argc, char *args[] )
     if ( r == 0 )
         printf("error: unable to decompress the string.");
     else {
-	printf("+status: %s\n", strcmp(str, desb->buffer)==0?"ok":"no");
+    printf("+status: %s\n", strcmp(str, desb->buffer)==0?"ok":"no");
         printf("data=%s\n", desb->buffer);
         printf("B::opacity=%d, size=%d\n", desb->opacity, desb->size);
     }

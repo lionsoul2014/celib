@@ -14,9 +14,9 @@
 #define _cel_array_default_length 16
 
 typedef struct {
-    uint_t size;		//size of the array
-    uint_t length;		//the length of the arrary 
-    void **items;		//array pointer
+    uint_t size;        //size of the array
+    uint_t length;        //the length of the arrary 
+    void **items;        //array pointer
 } cel_array_t;
 
 /**
@@ -28,8 +28,8 @@ typedef struct {
 /**
  * create a new cel array with a specified size.
  *
- * @param	uint_t
- * @return	cel_array_t *
+ * @param    uint_t
+ * @return    cel_array_t *
  */
 CEL_API cel_array_t *new_cel_array_opacity( int );
 
@@ -39,17 +39,17 @@ CEL_API void free_cel_array( cel_array_t **, cel_release_callback_fn_t );
 /*
  * initialize the specified cel_array_t
  *
- * @param 	cel_array_t *
- * @param	uint_t the opacity of the array - -1 to use the default opacity
- * @return 	1 for success and 0 for failed
+ * @param     cel_array_t *
+ * @param    uint_t the opacity of the array - -1 to use the default opacity
+ * @return     1 for success and 0 for failed
  */
 CEL_API int cel_array_init( cel_array_t *, int );
 
 /*
  * destroy the specified cel_array_t
  * 
- * @param	cel_array_t *
- * @return 	1 for success and 0 for failed
+ * @param    cel_array_t *
+ * @return     1 for success and 0 for failed
  */
 CEL_API int cel_array_destroy( cel_array_t *, cel_release_callback_fn_t );
 
@@ -61,46 +61,46 @@ CEL_API void cel_array_insert( cel_array_t *, uint_t, void * );
 
 /**
  * deletet the element at a specified position .
- * 	the deleted element will be returned .
+ *     the deleted element will be returned .
  *
- * @param	idx
- * @return	void *
+ * @param    idx
+ * @return    void *
  */
 CEL_API void *cel_array_del( cel_array_t *, uint_t );
 
 /**
  * search the object in the array and delete it .
  *
- * @param	obj
- * @param	cfunc
- * @return	void *
+ * @param    obj
+ * @param    cfunc
+ * @return    void *
  */
 CEL_API void *cel_array_del_obj( cel_array_t *, void *, cel_compare_fn_t );
 
 /**
  * get the element at a specified postion.
  *
- * @param	uint_t
- * @return	void *
+ * @param    uint_t
+ * @return    void *
  */
 CEL_API void *cel_array_get( cel_array_t *, uint_t );
 
 /**
  * search the object in the array .
  *
- * @param	obj
- * @param	cfunc
- * @return	int
+ * @param    obj
+ * @param    cfunc
+ * @return    int
  */
 CEL_API int cel_array_get_obj( cel_array_t *, void *, cel_compare_fn_t );
 
 /**
  * set the element at the specified position,
- * 	and the old element will be returned . 
+ *     and the old element will be returned . 
  *
- * @param	uint_t
- * @param	void *
- * @return 	void * ptr of the old element
+ * @param    uint_t
+ * @param    void *
+ * @return     void * ptr of the old element
  */
 CEL_API void *cel_array_set( cel_array_t *, uint_t, void * );
 
@@ -121,9 +121,9 @@ CEL_API void *cel_array_set_obj( cel_array_t *, void *, void *, cel_compare_fn_t
 //int array list block.
 //@date 2013-09-27
 typedef struct {
-    uint_t size;		//size of the array
-    uint_t length;		//the length of the arrary 
-    int *items;			//int array pointer
+    uint_t size;        //size of the array
+    uint_t length;        //the length of the arrary 
+    int *items;            //int array pointer
 } cel_intArray_t;
 
 /**
@@ -135,8 +135,8 @@ typedef struct {
 /**
  * create a new cel int array with a specified size.
  *
- * @param	uint_t
- * @return	cel_array_t
+ * @param    uint_t
+ * @return    cel_array_t
  */
 CEL_API cel_intArray_t *new_cel_intArray_opacity( uint_t ); 
 
@@ -146,17 +146,17 @@ CEL_API void free_cel_intArray( cel_intArray_t ** );
 /*
  * initialize the specified cel_array_t
  *
- * @param 	cel_intArray_t *
- * @param	uint_t initialize opacity of the array
- * @return 	1 for success and 0 for failed
+ * @param     cel_intArray_t *
+ * @param    uint_t initialize opacity of the array
+ * @return     1 for success and 0 for failed
  */
 CEL_API int cel_intArray_init( cel_intArray_t *, uint_t );
 
 /*
  * destroy the specified cel_array_t
  * 
- * @param	cel_intArray_t *
- * @return 	1 for success and 0 for failed
+ * @param    cel_intArray_t *
+ * @return     1 for success and 0 for failed
  */
 CEL_API int cel_intArray_destroy( cel_intArray_t * );
 
@@ -168,27 +168,27 @@ CEL_API int cel_intArray_insert( cel_intArray_t *, uint_t, int );
 
 /**
  * delete the element at a specified position .
- * 	the deleted element will be returned .
+ *     the deleted element will be returned .
  *
- * @param	idx
- * @return	int 0 for fail and 1 for true.
+ * @param    idx
+ * @return    int 0 for fail and 1 for true.
  */
 CEL_API int cel_intArray_del( cel_intArray_t *, uint_t );
 
 /**
  * search the object in the array and delete it .
  *
- * @param	obj
- * @param	cfunc
- * @return	int 0 for fail and 1 for true.
+ * @param    obj
+ * @param    cfunc
+ * @return    int 0 for fail and 1 for true.
  */
 CEL_API int cel_intArray_del_obj( cel_intArray_t *, int );
 
 /**
  * get the element at a specified postion.
  *
- * @param	uint_t
- * @return	int - item value.
+ * @param    uint_t
+ * @return    int - item value.
  */
 //CEL_API int cel_intArray_get( cel_intArray_t *, uint_t );
 #define cel_intArray_get( array, idx ) array->items[idx]
@@ -196,17 +196,17 @@ CEL_API int cel_intArray_del_obj( cel_intArray_t *, int );
 /**
  * search the object in the array .
  *
- * @param	obj
- * @return	int - the index of the searching object.
+ * @param    obj
+ * @return    int - the index of the searching object.
  */
 CEL_API int cel_intArray_get_obj( cel_intArray_t *, int );
 
 /**
  * set the element at the specified position,
- * 	and the old element will be returned . 
+ *     and the old element will be returned . 
  *
- * @param	uint_t
- * @param	idx
+ * @param    uint_t
+ * @param    idx
  */
 //CEL_API int cel_intArray_set( cel_intArray_t, uint_t, int );
 #define cel_intArray_set( array, idx, val )\
@@ -215,4 +215,4 @@ CEL_API int cel_intArray_get_obj( cel_intArray_t *, int );
 //size get macro
 #define cel_intArray_size( array ) array->size
 
-#endif	/*end ifndef*/
+#endif    /*end ifndef*/

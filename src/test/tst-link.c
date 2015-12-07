@@ -7,9 +7,9 @@ static int string_compare( void * str1, void * str2 ) {
     return strcmp((char *) str1, (char *) str2);
 }
 
-#define __PRINT_LINK__							\
-    for ( i = 0; i < link->size; i++ )					\
-	printf("get(%d): %s\n", i, ( char * ) cel_link_get(link, i));	\
+#define __PRINT_LINK__                            \
+    for ( i = 0; i < link->size; i++ )                    \
+    printf("get(%d): %s\n", i, ( char * ) cel_link_get(link, i));    \
     putchar('\n');
 
 int main( int argc, char *args[] )
@@ -25,7 +25,7 @@ int main( int argc, char *args[] )
     //test add
     printf("+---element add: \n");
     for ( i = 0; i < 6; i++ )
-	   cel_link_add_last( link, a[i]);
+       cel_link_add_last( link, a[i]);
     printf("size: %d\n", cel_link_size(link));
     __PRINT_LINK__
 
@@ -51,14 +51,14 @@ int main( int argc, char *args[] )
     printf("+---element set: \n");
     printf("set(1): %s\n", (char *) cel_link_set(link, 1, "father"));
     printf("set(%s): %s\n", "father",
-	    (char *) cel_link_set_obj(link, "yangqinghua", "mother", string_compare));
+        (char *) cel_link_set_obj(link, "yangqinghua", "mother", string_compare));
     printf("size: %d\n", cel_link_size(link));
     __PRINT_LINK__
 
     //test remove first
     printf("+---element remove first: \n");
     for ( i = 0; i < 3; i++ )
-	printf("+-%d: %s\n", i, (char *) cel_link_remove_first(link));
+    printf("+-%d: %s\n", i, (char *) cel_link_remove_first(link));
     printf("size: %d\n", cel_link_size(link));
     __PRINT_LINK__
 
@@ -71,7 +71,7 @@ int main( int argc, char *args[] )
     //test remove last
     printf("+---element remove last: \n");
     for ( i = 0; i < 5; i++ )
-	printf("+-%d: %s\n", i, (char *) cel_link_remove_last(link));
+    printf("+-%d: %s\n", i, (char *) cel_link_remove_last(link));
     printf("size: %d\n", cel_link_size(link));
     __PRINT_LINK__
 

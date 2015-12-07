@@ -1,6 +1,6 @@
 /**
  * cel memory operation module implements functions
- * 	source file.
+ *     source file.
  * @package src/cel_stdio.c
  *
  * @author chenxin <chenxin619315@gmail.com>
@@ -21,24 +21,24 @@ CEL_API void cel_mem_swap( void * a, void * b, int size )
 
     //swap the content.
     //do {
-    //    temp = *__a;	
+    //    temp = *__a;    
     //    *__a++ = *__b;
     //    *__b++ = temp;
     //} while ( --size > 0);
     while ( size-- > 0 ) 
     {
-    	temp = *__a;	
-    	*__a++ = *__b;
-    	*__b++ = temp;
+        temp = *__a;    
+        *__a++ = *__b;
+        *__b++ = temp;
     }
 }
 
 /**
  * copy specified bytes from source to the destination.
  *
- * @param	_src	- copy source.
- * @param	_dst	- copy destination.
- * @param	size	- bytes to copy
+ * @param    _src    - copy source.
+ * @param    _dst    - copy destination.
+ * @param    size    - bytes to copy
  */
 CEL_API void cel_mem_copy( void * _src, void * _dst, int size )
 {
@@ -50,16 +50,16 @@ CEL_API void cel_mem_copy( void * _src, void * _dst, int size )
     //} while ( --size > 0 );
     while ( size-- > 0 )
     {
-    	//printf("size=%d\n", size);
-    	*__dst++ = *__src++;
+        //printf("size=%d\n", size);
+        *__dst++ = *__src++;
     }
 }
 
 /**
  * print the content with forms of bits.
  *
- * @param	ptr
- * @param	__bytes	- bytes of the ptr.
+ * @param    ptr
+ * @param    __bytes    - bytes of the ptr.
  */
 CEL_API void cel_mem_bits( const char * name, const void * ptr, uint_t __bytes )
 {
@@ -70,32 +70,32 @@ CEL_API void cel_mem_bits( const char * name, const void * ptr, uint_t __bytes )
     if ( name != NULL ) printf("%s", name);
     for ( i = 0; i < length; )
     {
-    	if ( CEL_BIT_FETCH(str, i) != 0 )
-    	    printf("1");
-    	else
-    	    printf("0");
-    	//print a space for every 8 bits
-    	if ( (++i % 8) == 0 ) printf(" ");
+        if ( CEL_BIT_FETCH(str, i) != 0 )
+            printf("1");
+        else
+            printf("0");
+        //print a space for every 8 bits
+        if ( (++i % 8) == 0 ) printf(" ");
     }
     printf("\n");
 }
 
 /**
  * store specified bits from the specified index to
- * 	the specified address.
+ *     the specified address.
  *
- * @param	src
- * @param	start	- the start index.
- * @param	bits	- number of bits to store.
- * @param	dst	- data to store.
- * @param	idx	- the start index.
+ * @param    src
+ * @param    start    - the start index.
+ * @param    bits    - number of bits to store.
+ * @param    dst    - data to store.
+ * @param    idx    - the start index.
  */
 CEL_API void cel_mem_store( 
-	const void * _src,
-	uint_t start,
-	uint_t bits,
-	void * _dst, 
-	uint_t idx )
+    const void * _src,
+    uint_t start,
+    uint_t bits,
+    void * _dst, 
+    uint_t idx )
 {
     uchar_t * __src = ( uchar_t * ) _src;
     uchar_t * __dst = ( uchar_t * ) _dst;
@@ -105,12 +105,12 @@ CEL_API void cel_mem_store(
     //cel_mem_bits("_src: ", _src, 8);
     for ( i = 0; i < bits; i++ )
     {
-    	//printf("%2d: %d\n", start + i, CEL_BIT_FETCH(__src, start + i) != 0);
-    	if ( CEL_BIT_FETCH(__src, start + i) != 0 )
-    	    CEL_BIT_OPEN( __dst, idx + i );
-    	else
-    	    CEL_BIT_SHUT( __dst, idx + i );
-    }	
+        //printf("%2d: %d\n", start + i, CEL_BIT_FETCH(__src, start + i) != 0);
+        if ( CEL_BIT_FETCH(__src, start + i) != 0 )
+            CEL_BIT_OPEN( __dst, idx + i );
+        else
+            CEL_BIT_SHUT( __dst, idx + i );
+    }    
 
     //uint32_t * __dst = ( uint32_t * ) _dst;
     //uint32_t * __src = ( uint32_t * ) _src;
@@ -156,12 +156,12 @@ CEL_API llong_t cel_filesize( char * file )
     llong_t length = 0;
 
     if ( (fp = fopen( file, "rb" )) == NULL )
-	   return -1;
+       return -1;
     else 
     {
-    	fseek( fp, 0L, SEEK_END );
-    	length = ftell( fp );
-    	fclose( fp );
+        fseek( fp, 0L, SEEK_END );
+        length = ftell( fp );
+        fclose( fp );
     }
     
     //printf("cel_filesize#done");

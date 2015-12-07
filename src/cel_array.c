@@ -17,7 +17,7 @@ static void resize_array( cel_array_t *, uint_t );
 /**
  * create a new cel array with a default size.
  *
- * @return	cel_array_t
+ * @return    cel_array_t
  */
 //CEL_API cel_array_t *new_cel_array() {
 //    return new_cel_array_opacity( _cel_array_default_length );
@@ -29,7 +29,7 @@ CEL_API cel_array_t *new_cel_array_opacity( int opacity )
     cel_array_t *ptr = ( cel_array_t * ) cel_malloc( sizeof( cel_array_t ) );
     if ( ptr == NULL ) 
     {
-	   CEL_ALLOCATE_ERROR("new_cel_array_opacity", sizeof(cel_array_t));
+       CEL_ALLOCATE_ERROR("new_cel_array_opacity", sizeof(cel_array_t));
     }
 
     if ( cel_array_init(ptr, opacity) == 0 )
@@ -102,8 +102,8 @@ CEL_API int cel_array_destroy(
 /**
  * create a specified number of ptr blocks.
  *
- * @param	__blocks
- * @return 	void **
+ * @param    __blocks
+ * @return     void **
  */
 static void **create_array_blocks( uint_t __blocks ) 
 {
@@ -116,15 +116,15 @@ static void **create_array_blocks( uint_t __blocks )
 CEL_API void cel_array_add( cel_array_t *array, void * value ) 
 {
     if ( array->size >= array->length ) 
-	resize_array( array, array->size * 2 + 1  );
+    resize_array( array, array->size * 2 + 1  );
     array->items[array->size++] = value;
 }
 
 /**
  * resize the array to a specified opacity .
  *
- * @param	array
- * @param	opacity
+ * @param    array
+ * @param    opacity
  */
 static void resize_array( cel_array_t *array, uint_t opacity ) 
 {
@@ -132,7 +132,7 @@ static void resize_array( cel_array_t *array, uint_t opacity )
 
     //register uint_t i;
     //for ( i = 0; i < array->size; i++ )
-    //	nitems[i] = array->items[i];
+    //    nitems[i] = array->items[i];
     memcpy(nitems, array->items, array->size * sizeof(void *));
 
     //free the old items
@@ -142,27 +142,27 @@ static void resize_array( cel_array_t *array, uint_t opacity )
 }
 
 CEL_API void cel_array_insert( 
-	cel_array_t *array, uint_t idx, void * value ) 
+    cel_array_t *array, uint_t idx, void * value ) 
 {
     register uint_t i;
     if ( idx < array->size ) {
-    	if ( array->size >= array->length ) 
-    	    resize_array( array, array->size * 2 + 1 );
+        if ( array->size >= array->length ) 
+            resize_array( array, array->size * 2 + 1 );
 
-    	//copy the items
-    	for ( i = array->size; i > idx; i-- ) 
-    	    array->items[i] = array->items[i - 1];	
-    	array->items[idx] = value;
-    	array->size++;
+        //copy the items
+        for ( i = array->size; i > idx; i-- ) 
+            array->items[i] = array->items[i - 1];    
+        array->items[idx] = value;
+        array->size++;
     }
 }
 
 /**
  * deletet the element at a specified position .
- * 	the deleted element will be returned .
+ *     the deleted element will be returned .
  *
- * @param	idx
- * @return	void *
+ * @param    idx
+ * @return    void *
  */
 CEL_API void * cel_array_del( cel_array_t *array, uint_t idx ) 
 {
@@ -173,8 +173,8 @@ CEL_API void * cel_array_del( cel_array_t *array, uint_t idx )
     //bak the element to deleted
     old = array->items[idx];
     for ( i = idx; i < array->size; i++ )
-	array->items[i] = array->items[i+1];
-    array->size--;		//minus the size
+    array->items[i] = array->items[i+1];
+    array->size--;        //minus the size
 
     return old;
 }
@@ -182,14 +182,14 @@ CEL_API void * cel_array_del( cel_array_t *array, uint_t idx )
 /**
  * search the object in the array and delete it .
  *
- * @param	obj
- * @param	cfunc
- * @return	void *
+ * @param    obj
+ * @param    cfunc
+ * @return    void *
  */
 CEL_API void * cel_array_del_obj( 
-	cel_array_t *array,
-	void * obj,
-	cel_compare_fn_t cfunc ) 
+    cel_array_t *array,
+    void * obj,
+    cel_compare_fn_t cfunc ) 
 {
     int i = cel_array_get_obj( array, obj, cfunc );
     if ( i == -1 ) return NULL;
@@ -206,34 +206,34 @@ CEL_API void * cel_array_get( cel_array_t *array, uint_t idx )
 /**
  * search the object in the array .
  *
- * @param	obj
- * @param	cfunc
- * @return	int
+ * @param    obj
+ * @param    cfunc
+ * @return    int
  */
 CEL_API int cel_array_get_obj( 
-	cel_array_t *array, 
-	void * obj,
-	cel_compare_fn_t cfunc )
+    cel_array_t *array, 
+    void * obj,
+    cel_compare_fn_t cfunc )
 {
     register uint_t i;
     for ( i = 0; i < array->size; i++ ) {
-	if ( obj == array->items[i] 
-		|| cfunc( array->items[i], obj ) == 0 )
-	    return i;
+    if ( obj == array->items[i] 
+        || cfunc( array->items[i], obj ) == 0 )
+        return i;
     }
     return -1;
 }
 
 /**
  * replace the element at a specified position 
- * 	with a new value, and the old element will be return .
+ *     with a new value, and the old element will be return .
  *
- * @param	idx
- * @param	value
- * @reutrn	void *
+ * @param    idx
+ * @param    value
+ * @reutrn    void *
  */
 CEL_API void * cel_array_set( 
-	cel_array_t *array, uint_t idx, void * value ) 
+    cel_array_t *array, uint_t idx, void * value ) 
 {
     void * old;
     if ( idx >= array->size ) return NULL;
@@ -246,10 +246,10 @@ CEL_API void * cel_array_set(
 
 
 CEL_API void * cel_array_set_obj( 
-	cel_array_t *array,
-	void * obj,
-	void * value,
-	cel_compare_fn_t cfunc ) 
+    cel_array_t *array,
+    void * obj,
+    void * value,
+    cel_compare_fn_t cfunc ) 
 {
     int i = cel_array_get_obj( array, obj, cfunc );
     if ( i == -1 ) return NULL;
@@ -271,7 +271,7 @@ CEL_API void * cel_array_set_obj(
  * create a new cel int array with a default size. */
 //CEL_API cel_intArray_t *new_cel_intArray()
 //{
-//	return new_cel_intArray_opacity( _cel_array_default_length );
+//    return new_cel_intArray_opacity( _cel_array_default_length );
 //}
 
 #define create_int_blocks( opacity )\
@@ -283,7 +283,7 @@ static void resize_intArray( cel_intArray_t *array, uint_t opacity )
 
     //register uint_t i;
     //for ( i = 0; i < array->size; i++ )
-    //	nitems[i] = array->items[i];
+    //    nitems[i] = array->items[i];
     memcpy( nitems, array->items, array->size * sizeof(int *) );
 
     //free the old items
@@ -295,15 +295,15 @@ static void resize_intArray( cel_intArray_t *array, uint_t opacity )
 /**
  * create a new cel int array with a specified size.
  *
- * @param	uint_t
- * @return	cel_array_t
+ * @param    uint_t
+ * @return    cel_array_t
  */
 CEL_API cel_intArray_t *new_cel_intArray_opacity( uint_t opacity )
 {
     cel_intArray_t *ptr = ( cel_intArray_t * ) 
-	cel_malloc( sizeof( cel_intArray_t ) );
+    cel_malloc( sizeof( cel_intArray_t ) );
     if ( ptr == NULL ) {
-	   CEL_ALLOCATE_ERROR("new_cel_intArray_opacity", sizeof(cel_intArray_t));
+       CEL_ALLOCATE_ERROR("new_cel_intArray_opacity", sizeof(cel_intArray_t));
     }
 
     if ( cel_intArray_init(ptr, opacity) == 0 )
@@ -369,24 +369,24 @@ CEL_API int cel_intArray_destroy( cel_intArray_t *array )
 CEL_API int cel_intArray_add( cel_intArray_t *array, int val )
 {
     if ( array->size >= array->length )
-	resize_intArray( array, array->size * 2 + 1 );
+    resize_intArray( array, array->size * 2 + 1 );
     array->items[array->size++] = val;
     return 1;
 }
 
 //insert a specified element to at a specified position
 CEL_API int cel_intArray_insert( 
-	cel_intArray_t *array, uint_t idx, int val )
+    cel_intArray_t *array, uint_t idx, int val )
 {
-	register uint_t i;
+    register uint_t i;
     if ( idx >= array->size ) return 0;
 
     if ( array->size >= array->length ) 
-		resize_intArray( array, array->size * 2 + 1 );
+        resize_intArray( array, array->size * 2 + 1 );
 
     //copy the items
     for ( i = array->size; i > idx; i-- ) 
-	array->items[i] = array->items[i - 1];	
+    array->items[i] = array->items[i - 1];    
     array->items[idx] = val;
     array->size++;
 
@@ -395,19 +395,19 @@ CEL_API int cel_intArray_insert(
 
 /**
  * delete the element at a specified position .
- * 	the deleted element will be returned .
+ *     the deleted element will be returned .
  *
- * @param	idx
- * @return	int 0 for fail and 1 for bingo.
+ * @param    idx
+ * @return    int 0 for fail and 1 for bingo.
  */
 CEL_API int cel_intArray_del( cel_intArray_t *array, uint_t idx )
 {
-	register uint_t i;
+    register uint_t i;
     if ( idx >= array->size ) return 0;
     
     for ( i = idx; i < array->size; i++ )
-	array->items[i] = array->items[i+1];
-    array->size--;		//minus the size
+    array->items[i] = array->items[i+1];
+    array->size--;        //minus the size
 
     return 1;
 }
@@ -415,12 +415,12 @@ CEL_API int cel_intArray_del( cel_intArray_t *array, uint_t idx )
 /**
  * search the object in the array and delete it .
  *
- * @param	obj
- * @param	cfunc
- * @return	int 0 for fail and 1 for true.
+ * @param    obj
+ * @param    cfunc
+ * @return    int 0 for fail and 1 for true.
  */
 CEL_API int cel_intArray_del_obj( 
-	cel_intArray_t *array, int val )
+    cel_intArray_t *array, int val )
 {
     int i = cel_intArray_get_obj( array, val );
     if ( i == -1 ) return 0; 
@@ -430,40 +430,40 @@ CEL_API int cel_intArray_del_obj(
 /**
  * get the element at a specified postion.
  *
- * @param	uint_t
- * @return	void *
+ * @param    uint_t
+ * @return    void *
  */
 //CEL_API int cel_intArray_get( cel_intArray_t *array, uint_t idx )
 //{
-//	return array->items[idx];
+//    return array->items[idx];
 //}
 
 /**
  * search the object in the array .
  *
- * @param	obj
- * @return	int - the index of the search object.
+ * @param    obj
+ * @return    int - the index of the search object.
  */
 CEL_API int cel_intArray_get_obj( cel_intArray_t *array, int val )
 {
     register uint_t i;
     for ( i = 0; i < array->size; i++ ) {
-	if ( array->items[i] == val )
-	    return i;
+    if ( array->items[i] == val )
+        return i;
     }
     return 0;
 }
 
 /**
  * set the element at the specified position,
- * 	and the old element will be returned . 
+ *     and the old element will be returned . 
  *
- * @param	uint_t
- * @param	void *
- * @return 	void * ptr of the old element
+ * @param    uint_t
+ * @param    void *
+ * @return     void * ptr of the old element
  */
 //CEL_API int cel_intArray_set( 
-//		cel_intArray_t *array, uint_t idx, int val )
+//        cel_intArray_t *array, uint_t idx, int val )
 //{
-//	array->items[idx] = val;
+//    array->items[idx] = val;
 //}

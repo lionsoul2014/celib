@@ -1,6 +1,6 @@
 /**
  * cel data compress/decompress module interface header file.
- * 	@package src/cel_compress.h.
+ *     @package src/cel_compress.h.
  *
  * compress algorithm:
  * 1. RLE - Run length encoding.
@@ -29,22 +29,22 @@
 CEL_API int cel_rle_encode_string( char *, uint_t, cel_strbuff_t * );
 
 /* decompress the specified string
- * 	compress with RLE compress algorithm.
+ *     compress with RLE compress algorithm.
  *
- * @return 0 for false and 1 for decode success.	
+ * @return 0 for false and 1 for decode success.    
  * */
 CEL_API int cel_rle_decode_string( char *, uint_t, cel_strbuff_t * );
 
 /* compress the specified file with RLE compress algorhim.
  *
- * @return	the length of the encoded file or -1 for failed.
+ * @return    the length of the encoded file or -1 for failed.
  * */
 CEL_API int cel_rle_encode_file( char *, char * );
 
 /* decompress the specified file
- * 	encode with RLE compress algorithm.
+ *     encode with RLE compress algorithm.
  *
- * @return	the length of the decoded file or -1 for failed.
+ * @return    the length of the decoded file or -1 for failed.
  * */
 CEL_API int cel_rle_decode_file( char *, char * );
 /* end rle
@@ -90,4 +90,4 @@ CEL_API int cel_lzw_encode_file( char *, char * );
 CEL_API int cel_lzw_decode_file( char *, char * );
 /*}}}*/
 
-#endif	/*end ifndef*/
+#endif    /*end ifndef*/

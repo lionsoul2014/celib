@@ -20,13 +20,13 @@ long_t));
 „ putchar('\n');
 „ 
 „!//little-endian for local store.
-„ 	printf("+ƒ-test char ptr: \n");
+„     printf("+ƒ-test char ptr: \n");
 „ 5for ( i = 0; i < sizeof(uint_t); i++ ) 
-	printf("byt'-%d, %2c, %p\n", i, str[i], &str[i] );
+    printf("byt'-%d, %2c, %p\n", i, str[i], &str[i] );
 „ putchar('\n');
 
 „ //package them in bit-endian.
-„ 	printf("+ƒ-test bits opt: \n);
+„     printf("+ƒ-test bits opt: \n);
 „ :printf("((a>>24) & 0xFF)=%2c\n", (char)((a>>24) & 0xFF));
 „ :printf("((a>>16) & 0xFF)=%2c\n", (char)((a>>16) & 0xFF));„ :printf("((a>> 8) & 0xFF)=%2c\n", (char)((a>> 8) & 0xFF));
 „ :printf("((a>> 0) & 0xFF)=%2c\n", (char)((a>> 0) & 0xFF));

@@ -13,8 +13,8 @@ int main( int argc, char **args )
     uint32_t str_crc32;
 
     if ( argc != 2 ) {
-	printf("Usage: crc32 file path\n");
-    	return 0;
+    printf("Usage: crc32 file path\n");
+        return 0;
     }
 
     printf("+---test cel_crc32_hash: \n");

@@ -9,7 +9,7 @@ int main ( int argc, char *args[] )
 {
     char buff[64];
     if ( sprintf(buff, "%d%c", 32, 'A') != -1 )
-	printf("%s", buff);
+    printf("%s", buff);
     putchar('\n');
     return 0;
 }

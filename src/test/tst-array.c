@@ -14,16 +14,16 @@ static int strcompare( void * str1, void * str2 )
 }
 
 //static int scomp( void * str1, void * str2 ) {
-//	cel_array_t *a1 = ( cel_array_t * ) str1;
-//	cel_array_t *a2 = ( cel_array_t * ) str2;
-//	if ( a1->size == a2->size ) return 0;
-//	if ( a1->size < a2->size ) return -1;
-//	return 1;
+//    cel_array_t *a1 = ( cel_array_t * ) str1;
+//    cel_array_t *a2 = ( cel_array_t * ) str2;
+//    if ( a1->size == a2->size ) return 0;
+//    if ( a1->size < a2->size ) return -1;
+//    return 1;
 //}
 
 void rmcallback( void * value ) 
 {
-	printf("+-%s\n", (char *) value);
+    printf("+-%s\n", (char *) value);
 }
 
 int main (int argc, char **args) 
@@ -36,13 +36,13 @@ int main (int argc, char **args)
     array = &arr;
 
     char * a[]= {
-    	"chenxin", "yanzi", "zhangrenfang", "yangjiang", "panzi"
+        "chenxin", "yanzi", "zhangrenfang", "yangjiang", "panzi"
     };
     
     for ( i = 0; i < 5; i++ ) 
     {
-    	printf("+--add %s\n", a[i]);
-    	cel_array_add( array, a[i] );
+        printf("+--add %s\n", a[i]);
+        cel_array_add( array, a[i] );
     }
     printf("size: %d\n", cel_array_size(array));
 

@@ -1,7 +1,7 @@
 /**
  * cel bloom filter test program.
  *
- * @author	chenxin <chenxin619315@gmail.com>
+ * @author    chenxin <chenxin619315@gmail.com>
  */
 #include "../cel_bloomfilter.h"
 #include <stdio.h>
@@ -12,12 +12,12 @@ int main( int argc, char **args )
 
     //exists sets
     char *str[] = {
-    	"father", "mother", "chenxin", "roe", "jcseg", "friso", "robbe", "lionsoul"
+        "father", "mother", "chenxin", "roe", "jcseg", "friso", "robbe", "lionsoul"
     };
 
     //Not exists sets
     char *str1[] = {
-    	"lvs", "tankwar", "syrian", "opert", "php"
+        "lvs", "tankwar", "syrian", "opert", "php"
     };
     
     //cel bloom
@@ -32,7 +32,7 @@ int main( int argc, char **args )
     printf("+---test add elements: \n");
     for ( i = 0; i < 8; i++ ) 
     {
-	   cel_bloomfilter_add(bloom, str[i]);
+       cel_bloomfilter_add(bloom, str[i]);
     }
     printf("size=%d\n", cel_bloomfilter_size(bloom));
     putchar('\n');
@@ -40,14 +40,14 @@ int main( int argc, char **args )
     printf("+---test check exists elements: \n");
     for ( i = 0; i < 8; i++ ) 
     {
-   	    printf("exists(%s)=%d\n", str[i], cel_bloomfilter_exists(bloom, str[i])); 
+           printf("exists(%s)=%d\n", str[i], cel_bloomfilter_exists(bloom, str[i])); 
     }
     putchar('\n');
 
     printf("+---test check not exists elements: \n");
     for ( i = 0; i < 5; i++ ) 
     {
-	   printf("exists(%s)=%d\n", str1[i], cel_bloomfilter_exists(bloom, str1[i]));
+       printf("exists(%s)=%d\n", str1[i], cel_bloomfilter_exists(bloom, str1[i]));
     }
     putchar('\n');
 

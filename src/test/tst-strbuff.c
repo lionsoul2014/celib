@@ -31,8 +31,8 @@ int main( int argc, char * args[] )
     printf("+---test append: \n");
     for ( i = 0; i < opacity; i++ ) 
     {
-	   cel_strbuff_append(sb, str[i], 1);
-	   printf("append(\"%-15s\")=%-15s\n", str[i], sb->buffer);
+       cel_strbuff_append(sb, str[i], 1);
+       printf("append(\"%-15s\")=%-15s\n", str[i], sb->buffer);
     }
     cel_strbuff_append_char(sb, '1', 2);
     printf("append('1')=%s\n", sb->buffer);

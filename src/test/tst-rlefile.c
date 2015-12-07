@@ -8,9 +8,9 @@
 #include <stdio.h>
 
 #define inputFileName(infile, outfile)\
-    printf("source file: ");		\
-    scanf("%s", infile);		\
-    printf("destination file: ");	\
+    printf("source file: ");        \
+    scanf("%s", infile);        \
+    printf("destination file: ");    \
     scanf("%s", outfile);
 
 int main( int argc, char *args[] )
@@ -39,8 +39,8 @@ int main( int argc, char *args[] )
     len = cel_filesize(infile);
     if ( len == -1 )
     {
-	printf("Error: file not exists\n");
-	exit(0);
+    printf("Error: file not exists\n");
+    exit(0);
     }
     flen = cel_rle_decode_file( infile, outfile );
     printf("srcLen=%d, dstLen=%d\n", len, flen );

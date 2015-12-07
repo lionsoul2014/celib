@@ -8,9 +8,9 @@
 static void print_array( cel_intArray_t *arr )
 {
     uint_t i;
-	printf("length=%d, size=%d: \n", arr->length, arr->size);
-	for ( i = 0; i < arr->size; i++ )
-		printf("%d, ", cel_intArray_get( arr, i ));
+    printf("length=%d, size=%d: \n", arr->length, arr->size);
+    for ( i = 0; i < arr->size; i++ )
+        printf("%d, ", cel_intArray_get( arr, i ));
     putchar('\n');
 }
 

@@ -11,7 +11,7 @@
 /**
  * when you define this marco,
  * means: you want to store the hashcode in the hashmap_node_t for
- * 	your program, of course this will make the hashmap
+ *     your program, of course this will make the hashmap
  * rebuild faster, otherwise will make more allocations.
  *
  * comment it for not store the hashcode.
@@ -23,8 +23,8 @@ struct cel_hashmap_node_struct {
     char *key;
     //value union
     union {
-	   void *ptr;
-	   int num;
+       void *ptr;
+       int num;
     } value;
     struct cel_hashmap_node_struct *next;
 #ifdef CEL_HASHMAP_STORE_HCODE
@@ -53,30 +53,30 @@ typedef void ( * cel_hashmap_rcb_fn_t ) ( cel_hashmap_node_t * );
 
 /*
  * create a default cel hashmap with a default
- * 	length and default factor
+ *     length and default factor
  *
- * @return	cel_hashmap_t
+ * @return    cel_hashmap_t
  */
 //CEL_API cel_hashmap_t new_cel_hashmap();
 #define new_cel_hashmap() new_cel_hashmap_opacity( 16, 0.75 )
 
 /*
  * create a cel hashmap with a specified length and
- * 	factory .
+ *     factory .
  *
- * @param	uint_t
- * @param	float
- * @return	cel_hashmap_t
+ * @param    uint_t
+ * @param    float
+ * @return    cel_hashmap_t
  */
 CEL_API cel_hashmap_t *new_cel_hashmap_opacity( int, float );
 
 /*
  * free the specified cel hashmap.
  * callback function will be invoked for each node,
- *	if it is not null.
+ *    if it is not null.
  */
 CEL_API void free_cel_hashmap( 
-	cel_hashmap_t **, cel_hashmap_rcb_fn_t );
+    cel_hashmap_t **, cel_hashmap_rcb_fn_t );
 
 /*
  * initialize the specified hashmap
@@ -99,9 +99,9 @@ CEL_API int cel_hashmap_destroy( cel_hashmap_t *, cel_hashmap_rcb_fn_t );
 /*
  * associated the key with the specified value .
  *
- * @param	char *
- * @param	void *
- * @return	void * the old the value or NULL
+ * @param    char *
+ * @param    void *
+ * @return    void * the old the value or NULL
  */
 CEL_API void *cel_hashmap_put( cel_hashmap_t *, char *, void * );
 
@@ -148,9 +148,9 @@ typedef cel_hashmap_t cel_ihashmap_t;
 /*
  * associated the key with the specified value .
  *
- * @param	char *
- * @param	int
- * @return	int (0 for fail and 1 for true)
+ * @param    char *
+ * @param    int
+ * @return    int (0 for fail and 1 for true)
  */
 CEL_API int cel_ihashmap_put( cel_ihashmap_t *, char *, int );
 
@@ -166,4 +166,4 @@ CEL_API int cel_ihashmap_exists( cel_ihashmap_t *, char * );
 //replace the value associated with the specified key.
 CEL_API int cel_ihashmap_set( cel_ihashmap_t *, char *, int );
 /*}}}*/
-#endif	/*end ifndef*/
+#endif    /*end ifndef*/

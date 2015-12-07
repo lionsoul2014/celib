@@ -1,6 +1,6 @@
 /**
  * cel math module implemented functions.
- * 	@package src/cel_math.c
+ *     @package src/cel_math.c
  *
  * @author chenxin <chenxin619315@gmail.com>
  */
@@ -10,8 +10,8 @@
 /**
  * get the next prime of the specified numeric.
  *
- * @param	n
- * @return	int
+ * @param    n
+ * @return    int
  */
 CEL_API int cel_next_prime( int n )
 {
@@ -24,8 +24,8 @@ CEL_API int cel_next_prime( int n )
 /**
  * check the specified numeric is a prime.
  *
- * @param	n
- * @return	int
+ * @param    n
+ * @return    int
  */
 CEL_API int cel_is_prime( int n )
 {
@@ -33,14 +33,14 @@ CEL_API int cel_is_prime( int n )
 
     //simple check
     if ( n == 2 || n == 3 )
-	   return 1;
+       return 1;
 
     if ( n == 1 || n % 2 == 0 )
-	   return 0;
+       return 0;
 
     //loop check
     for ( j = 3; j * j < n; j++ )
-	   if ( n % j == 0 ) return 0;
+       if ( n % j == 0 ) return 0;
 
     return 1;
 }
