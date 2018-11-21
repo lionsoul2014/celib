@@ -58,18 +58,18 @@ CEL_API void free_cel_strbuff( cel_strbuff_t ** );
 /*
  * create the specified string buffer
  *
- * @param    cel_strbuff_t
- * @param    uint_t default opacity
- * @param    cstring default string -  could be NULL
- * @return    int 1 for success and 0 for failed
+ * @param   cel_strbuff_t
+ * @param   uint_t default opacity
+ * @param   cstring default string -  could be NULL
+ * @return  int 1 for success and 0 for failed
  */
 CEL_API int cel_strbuff_init( cel_strbuff_t *, int, cstring );
 
 /*
  * destroy the specified cel_strbuff_t
  *
- * @param    cel_strbuff_t
- * @return    int 1 for success and 0 for failed
+ * @param   cel_strbuff_t
+ * @return  int 1 for success and 0 for failed
  */
 CEL_API int cel_strbuff_destroy( cel_strbuff_t * );
 
@@ -84,27 +84,26 @@ CEL_API int cel_strbuff_destroy( cel_strbuff_t * );
 
 /* append some bytes from a specified buffer
  *
- * @param cstring - the buffer to copy byte from.
- * @param len - the number of bytes to copy.
- * @param count - repeat times.
- * @return    int 1 for success and 0 for failed
+ * @param   cstring - the buffer to copy byte from.
+ * @param   len - the number of bytes to copy.
+ * @param   count - repeat times.
+ * @return  int 1 for success and 0 for failed
  * */
 CEL_API int cel_strbuff_append_from( cel_strbuff_t *, cstring, uint_t, int );
 
 /* append a char to the buffer.
  *
- * @param char
- * @param count - repeat times.
- * @return    1 for success and 0 for failed
+ * @param   char
+ * @param   count - repeat times.
+ * @return  1 for success and 0 for failed
  * */
 CEL_API int cel_strbuff_append_char( cel_strbuff_t *, char, int );
 
-/* insert a new string to the buffer from the 
- *     specified position.
+/* insert a new string to the buffer from the specified position.
  *
- * @param uint_t - the start position.
- * @param cstring - the string to insert in
- * @return    1 for success and 0 for failed
+ * @param   uint_t - the start position.
+ * @param   cstring - the string to insert in
+ * @return  1 for success and 0 for failed
  * */
 //CEL_API void cel_strbuff_insert( cel_strbuff_t *, uint_t, cstring );
 #define cel_strbuff_insert(sb, idx, str, count)\
@@ -112,38 +111,36 @@ CEL_API int cel_strbuff_append_char( cel_strbuff_t *, char, int );
 
 /* insert part of buffer to the buffer.
  *
- * @param uint_t - start position
- * @param cstring - source buffer
- * @param uint_t - number of bytes to copy
- * @param count - repeat times
- * @return    1 for success and 0 for failed
+ * @param   uint_t - start position
+ * @param   cstring - source buffer
+ * @param   uint_t - number of bytes to copy
+ * @param   count - repeat times
+ * @return  1 for success and 0 for failed
  * */
 CEL_API int cel_strbuff_insert_from( cel_strbuff_t *, uint_t, cstring, uint_t, int );
 
-/* insert a char to the buffer from a
- *     specified index position.
+/* insert a char to the buffer from a specified index position.
  *
- * @param char
- * @return    1 for success and 0 for failed
+ * @param   char
+ * @return  1 for success and 0 for failed
  * */
 CEL_API int cel_strbuff_insert_char( cel_strbuff_t *, uint_t, char, int );
 
 //get the char at a specified position.
 #define cel_strbuff_get( strbuff, idx ) strbuff->buffer[(idx)]
 
-/* remove  specified char from a
- *     specified position from the buffer
+/* remove  specified char from a specified position from the buffer
  *
- * @param uint_t - the start index
- * @param uint_t - number of chars to remove
- * @return    1 for success and 0 for failed
+ * @param   uint_t - the start index
+ * @param   uint_t - number of chars to remove
+ * @return  1 for success and 0 for failed
  * */
 CEL_API int cel_strbuff_remove( cel_strbuff_t *, uint_t, uint_t );
 
 /*
  * clear the specified string buffer
  *
- * @return    1 for success and 0 for failed
+ * @return  1 for success and 0 for failed
  */
 CEL_API int cel_strbuff_clear( cel_strbuff_t * );
 /* end of string buffer.

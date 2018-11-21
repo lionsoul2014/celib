@@ -13,9 +13,9 @@
 typedef uint32_t ( * cel_hash_fn_t ) ( const char * );
 
 typedef struct {
-    uint_t     length;
-    uint_t     size;
-    char     *str;
+    uint_t length;
+    uint_t size;
+    char *str;
     //about the hash functions
     cel_hash_fn_t *hfuncs;
     uint_t hlength;

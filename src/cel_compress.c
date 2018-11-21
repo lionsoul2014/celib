@@ -22,30 +22,26 @@
 /* find a char repeat for more than 2 times
  *     from a specifie string buffer.
  *
- * @param    inbuff
- * @param    inlen
- * @param    start
- * @param    len
- * @return    idx or -1 (when match none)
+ * @param   inbuff
+ * @param   inlen
+ * @param   start
+ * @param   len
+ * @return  idx or -1 (when match none)
  * */
-static int next_least3_repeat( 
-        char *inbuff, uint_t inlen, 
-        uint_t start, uint_t *len )
+static int next_least3_repeat( char *inbuff, uint_t inlen, uint_t start, uint_t *len )
 {
     register uint_t i, j;
     register int p;
     register char val;
 
-    for ( i = start; i < inlen; )
-    {
+    for ( i = start; i < inlen; ) {
         val = inbuff[i];
         p = 0;
         for ( j = i; j < inlen && p < RLE_BUCKET_MAX_LENGTH
                 && inbuff[j] == val; j++, p++ );
 
         //find the char repeat for more than 2 times.
-        if ( p > 2 ) 
-        {
+        if ( p > 2 ) {
             *len = p;
             return i;
         }
@@ -53,32 +49,28 @@ static int next_least3_repeat(
         //plus the offset.
         i += (p > 1) ? p : 1;
     }
+
     return -1;
 }
 
 /* compress the specified string with rle algorithm.
  *
- * @param    inbuff    - the string to encode.
- * @param    inlen    - length of the string.
- * @param    outbuff
- * @param    outlen
- * @return    1 for encode success and 0 for fail.
+ * @param   inbuff - the string to encode.
+ * @param   inlen - length of the string.
+ * @param   outbuff
+ * @param   outlen
+ * @return  1 for encode success and 0 for fail.
  * */
-CEL_API int cel_rle_encode_string( 
-        char *inbuff, uint_t inlen, cel_strbuff_t *sb )
+CEL_API int cel_rle_encode_string( char *inbuff, uint_t inlen, cel_strbuff_t *sb )
 {
     register uint_t i, p, last = 0;
     uint_t len = 0;
 
     //no-repeat bucket
     register uint_t buckets, t;
-
-    while ( last < inlen && ( p = next_least3_repeat( 
-                    inbuff, inlen, last, &len ) ) != -1 )
-    {
+    while (last < inlen && (p = next_least3_repeat(inbuff, inlen, last, &len)) != -1) {
         //Handle the no-repeat chars.
-        if ( p > last ) 
-        {
+        if ( p > last ) {
             buckets = (p - last) / 127;
 
             //Handle the buckets.
@@ -105,8 +97,7 @@ CEL_API int cel_rle_encode_string(
     }
 
     //Handle the last left chars as no-repeat bucket.
-    if ( last < inlen ) 
-    {
+    if ( last < inlen ) {
         buckets = (inlen - last) / 127;
 
         //Handle the buckets.
@@ -130,17 +121,15 @@ CEL_API int cel_rle_encode_string(
 /* decompress the specified string
  *     compress with RLE compress algorithm.
  *
- * @return 1 for decode success or 0.    
- * @see    cel_rle_enckde_string
+ * @return  1 for decode success or 0.    
+ * @see     cel_rle_enckde_string
  * */
-CEL_API int cel_rle_decode_string( 
-        char *inbuff, uint_t inlen, cel_strbuff_t *sb )
+CEL_API int cel_rle_decode_string( char *inbuff, uint_t inlen, cel_strbuff_t *sb )
 {
     register uint_t i, len;
     register char val;
 
-    for ( i = 0; i < inlen; )
-    {
+    for ( i = 0; i < inlen; ) {
         val = inbuff[i];
         //Count the length
         len = (val & 0x7F);
@@ -150,9 +139,7 @@ CEL_API int cel_rle_decode_string(
         if ( (val & 0x80) != 0 ) {
             cel_strbuff_append_char(sb, inbuff[i+1], len);
             i += 2;
-        }
-        //no-repeat chars.
-        else {
+        } else {  //no-repeat chars.
             cel_strbuff_append_from(sb, &inbuff[i+1], len, 1);
             i += (len + 1);
         }
@@ -164,12 +151,11 @@ CEL_API int cel_rle_decode_string(
 
 /* compress the specified file with RLE compress algorhim.
  *
- * @param    infile    - the file to encode.
- * @param    outfile
- * @return    the length of the encoded file or -1 for failed.
+ * @param   infile - the file to encode.
+ * @param   outfile
+ * @return  the length of the encoded file or -1 for failed.
  * */
-CEL_API int cel_rle_encode_file( 
-        char * infile, char * outfile )
+CEL_API int cel_rle_encode_file( char * infile, char * outfile )
 {
     FILE * infp, * outfp;
     uint_t len;
@@ -179,17 +165,17 @@ CEL_API int cel_rle_encode_file(
 
     //Open the file.
     if ( (infp = fopen( infile, "rb" )) == NULL 
-            || (outfp = fopen(outfile, "wb")) == NULL )
+            || (outfp = fopen(outfile, "wb")) == NULL ) {
         return -1;
-    else {
-        while ( (len = fread( inbuff, 1, 127, infp )) > 0 )
-        {
+    } else {
+        while ( (len = fread( inbuff, 1, 127, infp )) > 0 ) {
             //encode the buffer
             //return the string after encode.
             cel_rle_encode_string( inbuff, len, sb );
-            if ( fwrite( sb->buffer, 1, 
-                        sb->size, outfp ) != sb->size )
+            if ( fwrite( sb->buffer, 1, sb->size, outfp ) != sb->size ) {
                 return -1;
+            }
+
             length += sb->size;
             cel_strbuff_clear(sb);
         }
@@ -205,14 +191,12 @@ CEL_API int cel_rle_encode_file(
 }
 
 
-/* decompress the specified file
- *     encode with RLE compress algorithm.
+/* decompress the specified file encode with RLE compress algorithm.
  *
- * @return    the length of the decoded file or -1 for failed.
- * @see    cel_rle_encode_file
+ * @return  the length of the decoded file or -1 for failed.
+ * @see     cel_rle_encode_file
  * */
-CEL_API int cel_rle_decode_file( 
-        char * infile, char * outfile )
+CEL_API int cel_rle_decode_file( char * infile, char * outfile )
 {
     FILE * infp, * outfp;
     register char val;
@@ -220,10 +204,9 @@ CEL_API int cel_rle_decode_file(
     char inbuff[127];
 
     if ( (infp = fopen( infile, "rb" )) == NULL 
-            || (outfp = fopen( outfile, "wb" )) == NULL )
+            || (outfp = fopen( outfile, "wb" )) == NULL ) {
         return -1;
-    else 
-    {
+    } else {
         while ( (val = getc(infp)) != EOF ) {
             //Get the data length.
             len = (val & 0x7F);
@@ -239,9 +222,7 @@ CEL_API int cel_rle_decode_file(
                 memset( inbuff, val, len );
                 if ( fwrite( inbuff, 1, len, outfp ) != len )
                     return -1;
-            }
-            //no-repeat chars.
-            else {
+            } else {  //no-repeat chars.
                 if ( fread( inbuff, 1, len, infp ) != len )
                     return -1;
                 if ( fwrite( inbuff, 1, len, outfp ) != len )
@@ -280,12 +261,11 @@ static void lzw_encode_rcb( cel_hashmap_node_t *e )
  * @param len - length of the source string.
  * @param sb - encode result string buffer.
  * */
-CEL_API int cel_lzw_encode_string( 
-        char * inbuff, uint_t len, cel_strbuff_t *sb )
+CEL_API int cel_lzw_encode_string( char * inbuff, uint_t len, cel_strbuff_t *sb )
 {
     int dsize = 256, i, v = 0, rlen = 0, bits = CHAR_BIT;
-    cel_hashmap_t *map    = new_cel_hashmap_opacity(16, (float)0.80);
-    cel_strbuff_t *S     = new_cel_strbuff_opacity(3);
+    cel_hashmap_t *map = new_cel_hashmap_opacity(16, (float)0.80);
+    cel_strbuff_t *S = new_cel_strbuff_opacity(3);
     cel_intArray_t *ret = new_cel_intArray();
 
     //initialize the dictionary.
@@ -296,21 +276,18 @@ CEL_API int cel_lzw_encode_string(
     }
 
     //encode loop
-    for ( i = 0; i < len; i++ ) 
-    {
+    for ( i = 0; i < len; i++ ) {
         Z[0] = inbuff[i];
         cel_strbuff_append_char(S, Z[0], 1);
 
         //check the dictionary.
-        if ( ! cel_ihashmap_exists(map, S->buffer) ) 
-        {
+        if ( ! cel_ihashmap_exists(map, S->buffer) ) {
             //add the S+Z to dictionary.
             cel_ihashmap_put(map, strdup(S->buffer), dsize++);
 
             //remove the Z from S as the output.
             cel_strbuff_remove(S, S->size - 1, 1);
-            cel_intArray_add(ret, 
-                    cel_ihashmap_get(map, S->buffer));
+            cel_intArray_add(ret, cel_ihashmap_get(map, S->buffer));
             //printf("+%d\n", cel_ihashmap_get(map, S->buffer));
 
             //reset the S to Z.
@@ -329,8 +306,7 @@ CEL_API int cel_lzw_encode_string(
 
     //convert the encode codes to binary string.
     dsize = 256;
-    for ( i = 0; i < ret->size; i++ ) 
-    {
+    for ( i = 0; i < ret->size; i++ ) {
         //printf("v=%d, rlen=%d, bits=%d\n", v, rlen, bits);
         v = ( v << bits ) + ret->items[i];
         rlen += bits;
@@ -340,8 +316,7 @@ CEL_API int cel_lzw_encode_string(
         if ( dsize > ( 1 << bits ) ) bits++;
 
         //handle the bits large than CHAR_BIT
-        while ( rlen > 7 ) 
-        {
+        while ( rlen > 7 ) {
             rlen -= CHAR_BIT;
             cel_strbuff_append_char(sb, (v >> rlen), 1);
             v &= ( 1 << rlen ) - 1;
@@ -349,9 +324,9 @@ CEL_API int cel_lzw_encode_string(
     }
 
     //check and handle the left bits.
-    if ( rlen > 0 )
-        cel_strbuff_append_char(sb, 
-                v << (CHAR_BIT - rlen), 1);
+    if ( rlen > 0 ) {
+        cel_strbuff_append_char(sb, v << (CHAR_BIT - rlen), 1);
+    }
 
     return 1;
 }
@@ -371,8 +346,7 @@ static void lzw_decode_rcb( cel_hashmap_node_t *e )
  * @param len - length of the source string.
  * @param sb - encode result string buffer.
  * */
-CEL_API int cel_lzw_decode_string( 
-        cstring inbuff, uint_t len, cel_strbuff_t *sb )
+CEL_API int cel_lzw_decode_string( cstring inbuff, uint_t len, cel_strbuff_t *sb )
 {
     int dsize = 256, i;
     int v = 0, rlen = 0;
@@ -385,12 +359,10 @@ CEL_API int cel_lzw_decode_string(
     cel_strbuff_t *S, *T;
 
     //Convert the binary string to lzw codes.
-    for ( i = 0; i < len; i++ ) 
-    {
+    for ( i = 0; i < len; i++ ) {
         v = ( v << CHAR_BIT ) + ((uchar_t)inbuff[i]);
         rlen += CHAR_BIT;
-        if ( rlen >= bits ) 
-        {
+        if ( rlen >= bits ) {
             rlen -= bits;
             cel_intArray_add(ret, (v >> rlen));
             v &= (1 << rlen) - 1;
@@ -407,8 +379,7 @@ CEL_API int cel_lzw_decode_string(
     dsize = 256;
 
     //initialize the table.
-    for ( i = 0; i < dsize; i++ ) 
-    {
+    for ( i = 0; i < dsize; i++ ) {
         if ( sprintf(key, "%d", i) == -1 ) return 0;
         if ( sprintf(Z , "%c", i) == -1 ) return 0;
         cel_hashmap_put(map, strdup(key), strdup(Z));
@@ -421,21 +392,20 @@ CEL_API int cel_lzw_decode_string(
     dsize--;
 
     //decode loop
-    for ( i = 0; i < ret->size; i++ ) 
-    {
-        if ( sprintf(key, "%d", ret->items[i]) == -1 ) 
+    for ( i = 0; i < ret->size; i++ ) {
+        if ( sprintf(key, "%d", ret->items[i]) == -1 ) {
             return 0;
+        }
         //printf("i=%d, key=%s, ", i, key);
 
-        if ( ! cel_hashmap_exists(map, key) ) 
-        {
+        if ( cel_hashmap_exists(map, key) ) {
+            entry = (char *)cel_hashmap_get( map, key );
+        } else {
             cel_strbuff_clear(T);
             cel_strbuff_append(T, S->buffer, 1);
             cel_strbuff_append_char(T, S->buffer[0], 1);
             entry = T->buffer;                     //S + S[0]
         }
-        else 
-            entry = (char *)cel_hashmap_get( map, key );
 
         //append the entry to the result.
         cel_strbuff_append(sb, entry, 1);
