@@ -9,6 +9,25 @@
 #include "cel_string.h"
 #include <string.h>
 
+CEL_API void cel_left_trim(char *str)
+{
+    register int i, j;
+    register int slen = strlen(str);
+    for ( i = 0; i < slen; i++ ) {
+        if ( str[i] != ' ' && str[i] != '\t' && str[i] != '\r' ) {
+            break;
+        }
+    }
+
+    if ( i > 0 ) {
+        for ( j = 0; i < slen; i++, j++ ) {
+            str[j] = str[i];
+        }
+
+        str[j] = '\0';
+    }
+}
+
 CEL_API void cel_right_trim(char *str)
 {
     register int i;
@@ -412,7 +431,6 @@ CEL_API int cel_strbuff_clear( cel_strbuff_t *sb )
 /* end of string buffer.
  * }}}
  * */
-
 
 
 
