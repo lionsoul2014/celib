@@ -9,6 +9,18 @@
 #include "cel_string.h"
 #include <string.h>
 
+CEL_API void cel_right_trim(char *str)
+{
+    register int i;
+    register int slen = strlen(str);
+    for ( i = slen - 1; i >= 0; i-- ) {
+        if ( str[i] != ' ' && str[i] != '\t' && str[i] != '\r' ) {
+            str[i+1] = '\0';
+            break;
+        }
+    }
+}
+
 /* {{{ cel string block*/
 CEL_API cel_string_t *new_cel_string( cstring str )
 {

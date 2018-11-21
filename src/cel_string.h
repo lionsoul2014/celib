@@ -10,6 +10,8 @@
 #include "cel_api.h"
 #include <string.h>
 
+CEL_API void cel_right_trim(char *);
+
 //cel string block.
 typedef struct {
     cstring str;

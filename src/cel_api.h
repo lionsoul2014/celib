@@ -24,10 +24,10 @@
 
 //memory allocation error
 #define CEL_ALLOCATE_ERROR(func, bytes)    \
- do { \
-    printf("<CEL>: Allocate Error In Function <%s> For %d Bytes.\n", func, bytes);    \
+do { \
+    printf("<CEL>: Allocate Error In Function <%s> For %lu Bytes.\n", func, (unsigned long int) bytes);    \
     return NULL; \
-} while (0)
+} while (0);
 
 /*
  * memory allocation macro define
