@@ -29,7 +29,6 @@ int main( int argc, char *args[] )
     {
         cel_md5_string( str[i], digest );
         printf("cel_md5_string(\"%-26s\")=", str[i]);
-        // md5_print( digest );
         cel_md5_print(digest, md5_str);
         printf("%s", md5_str);
         putchar('\n');

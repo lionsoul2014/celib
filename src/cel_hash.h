@@ -119,15 +119,22 @@ CEL_API void cel_crc32_file( const char *, uint32_t * );
  * MD5 hash algorithm.
  *     Message digest Algorithm 5.
  */
-struct cel_md5_entry {
-    ulong_t state[4];    /*state (ABCD)*/
-    ulong_t count[2];    /*number of bits, modulo 2^64*/
-    uchar_t buffer[64];    /*input buffer*/
-};
-typedef struct cel_md5_entry cel_md5_t;
+// struct cel_md5_entry {
+//     ulong_t state[4];    /*state (ABCD)*/
+//     ulong_t count[2];    /*number of bits, modulo 2^64*/
+//     uchar_t buffer[64];    /*input buffer*/
+// };
+// typedef struct cel_md5_entry cel_md5_t;
+
+/* Define the state of the MD5 Algorithm. */
+typedef struct cel_md5_entry {
+    uint_t count[2];	/* message length in bits, lsw first */
+    uint_t abcd[4];		/* digest buffer */
+    uchar_t buf[64];	/* accumulate block */
+} cel_md5_t;
 
 CEL_API void cel_md5_init( cel_md5_t * );
-CEL_API void cel_md5_update( cel_md5_t *, uchar_t *, uint_t );
+CEL_API void cel_md5_update( cel_md5_t *, const uchar_t *, int );
 CEL_API void cel_md5_final( cel_md5_t *, uchar_t digest[16] );
 
 CEL_API void cel_md5_string( const cstring, uchar_t digest[16] );
