@@ -98,7 +98,7 @@ static void Decode( ulong_t * output, uchar_t * input, uint_t len );
 /*
  * md5 initialization.
  */
-CEL_API void cel_md5_init( cel_md5_t context )
+CEL_API void cel_md5_init( cel_md5_t *context )
 {
     context->count[0] = context->count[1] = 0;
 
@@ -117,7 +117,7 @@ CEL_API void cel_md5_init( cel_md5_t context )
  * @param   input - the block.
  * @param   length - the length of the input in bytes.
  */
-CEL_API void cel_md5_update(cel_md5_t context, uchar_t *input, uint_t inputLen)
+CEL_API void cel_md5_update(cel_md5_t *context, uchar_t *input, uint_t inputLen)
 {
     uint_t i, index, partLen;
 
@@ -152,7 +152,7 @@ CEL_API void cel_md5_update(cel_md5_t context, uchar_t *input, uint_t inputLen)
     memcpy( &context->buffer[index], &input[i], inputLen - i );
 }
 
-CEL_API void cel_md5_final(cel_md5_t context, uchar_t digest[16])
+CEL_API void cel_md5_final(cel_md5_t *context, uchar_t digest[16])
 {
     uchar_t bits[8];
     uint_t index, padlen;
@@ -301,7 +301,7 @@ static void Decode(ulong_t *output, uchar_t *input, uint_t len)
  */
 CEL_API void cel_md5_string(const cstring str, uchar_t digest[16])
 {
-    cel_md5_entry context;
+    cel_md5_t context;
     uint_t len = strlen( str );
 
     cel_md5_init( &context );
@@ -313,7 +313,7 @@ CEL_API void cel_md5_string(const cstring str, uchar_t digest[16])
  * */
 CEL_API int cel_md5_file(const cstring filename, uchar_t digest[16])
 {
-    cel_md5_entry context;
+    cel_md5_t context;
     FILE * file;
     int len;
     uchar_t buffer[1024];
