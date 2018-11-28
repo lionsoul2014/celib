@@ -20,6 +20,7 @@ int main( int argc, char *args[] )
     "123456", "153759",  "619315",
     "abcdefghijklmnopqrstuvwxyz"};
     char filename[1024] = {0};
+    char md5_str[33];
 
     uint_t length = 8, i;
     uchar_t digest[17] = {0};
@@ -28,7 +29,9 @@ int main( int argc, char *args[] )
     {
         cel_md5_string( str[i], digest );
         printf("cel_md5_string(\"%-26s\")=", str[i]);
-        md5_print( digest );
+        // md5_print( digest );
+        cel_md5_print(digest, md5_str);
+        printf("%s", md5_str);
         putchar('\n');
     }
     putchar('\n');

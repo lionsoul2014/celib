@@ -335,3 +335,12 @@ CEL_API int cel_md5_file(const cstring filename, uchar_t digest[16])
 
     return 0;
 }
+
+CEL_API void cel_md5_print(uchar_t digest[16], char buffer[32])
+{
+    int i;
+    for ( i = 0; i < 16; i++ ) {
+        sprintf(buffer, "%02x", digest[i]);
+        buffer += 2;
+    }
+}

@@ -127,14 +127,12 @@ struct cel_md5_entry {
 typedef struct cel_md5_entry cel_md5_t;
 
 CEL_API void cel_md5_init( cel_md5_t * );
-
 CEL_API void cel_md5_update( cel_md5_t *, uchar_t *, uint_t );
-
 CEL_API void cel_md5_final( cel_md5_t *, uchar_t digest[16] );
 
 CEL_API void cel_md5_string( const cstring, uchar_t digest[16] );
-
 CEL_API int cel_md5_file( const cstring, uchar_t digest[16] );
+CEL_API void cel_md5_print(uchar_t digest[16], char buffer[32]);
 
 #endif    /*end ifndef*/
 
