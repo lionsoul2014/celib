@@ -82,13 +82,16 @@ CEL_API int cel_link_init( cel_link_t *link )
  */
 CEL_API int cel_link_destroy(cel_link_t *link, cel_release_callback_fn_t relfunc)
 {
-    cel_link_node_t *node;
+    cel_link_node_t *node, *_next;
 
     if ( link != NULL ) {
-        for ( node = link->head->_next; node != link->tail; node = node->_next ) {
+        for ( node = link->head->_next; node != link->tail; ) {
+            // backup the _next
+            _next = node->_next;
             //invoke the callback function if it is not NULL
             if ( relfunc != NULL ) relfunc( node->value );
             cel_free( node );
+            node = _next;
         }
 
         cel_free( link->head );
